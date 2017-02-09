@@ -1,0 +1,38 @@
+{# src/DATA/DataBundle/Resources/views/Artwork/register.html.twig #}
+ 
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}
+    Insert Entity Fetch - {{ parent() }}
+{% endblock %}
+    
+{% block h1 %}
+    Insert Entity Fetch
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li class="active">Insert Entity Fetch</li>
+{% endblock %} 
+
+{% block content %}
+<div class="row">
+    <section id="content" class="col-lg-12">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+        
+        <div class="well">
+            {% include "AdminBundle:Entity:insert_content.html.twig" %}
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    {% javascripts  '@AdminBundle/Resources/public/js/entity/insert.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

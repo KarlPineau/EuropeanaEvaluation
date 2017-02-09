@@ -1,0 +1,20 @@
+admin_home_index:
+    path:     /
+    defaults: { _controller: AdminBundle:Home:index }
+
+admin_entity_insert:
+    path:     /entity/fetch/insert
+    defaults: { _controller: AdminBundle:Entity:insert }
+
+admin_entity_viewWaitingFetch:
+    path:     /entity/fetch/waiting
+    defaults: { _controller: AdminBundle:Entity:viewWaitingFetch }
+
+admin_entity_processFetch:
+    path:     /entity/fetch/process
+    defaults: { _controller: AdminBundle:Entity:processFetch }
+
+admin_graph_index:
+    path:     /graph
+    defaults: { _controller: AdminBundle:Graph:index }
+

@@ -1,0 +1,57 @@
+<?php
+
+namespace EntityBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * EntityRelation
+ *
+ * @ORM\Table(name="entity_relation")
+ * @ORM\Entity(repositoryClass="EntityBundle\Repository\EntityRelationRepository")
+ */
+class EntityRelation
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="entity1", type="string", length=255)
+     */
+    private $entity1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="entity2", type="string", length=255)
+     */
+    private $entity2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="algorithm", type="string", length=255)
+     */
+    private $algorithm;
+
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+

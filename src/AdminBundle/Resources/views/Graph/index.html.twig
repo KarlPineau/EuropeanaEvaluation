@@ -1,0 +1,34 @@
+{# src/DATA/DataBundle/Resources/views/Artwork/index.html.twig #}
+ 
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}
+    Graph - {{ parent() }}
+{% endblock %} 
+    
+{% block h1 %}
+    Graph
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li class="active">Graph</li>
+{% endblock %}
+
+{% block h1_extend %}
+{% endblock %}
+    
+{% block content %}
+    <div class="row">
+        <section class="col-md-12">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert col-md-12 alert-success">
+                    {{ flashMessage }}
+                </div>
+                <br />
+            {% endfor %}
+
+            {{ dump(objects) }}
+        </section>
+    </div>
+{% endblock %}

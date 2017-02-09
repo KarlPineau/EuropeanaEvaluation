@@ -1,0 +1,14 @@
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <fieldset>
+        <legend>EntitiesFetch:</legend>
+
+        <div class="">
+            {{ form_row(form.entitiesFetch) }}
+        </div>
+    </fieldset>
+        <br />
+    {{ form_rest(form) }}
+    <div class="text-center"><input type="submit" class="btn btn-primary" /></div>
+{{ form_end(form) }}

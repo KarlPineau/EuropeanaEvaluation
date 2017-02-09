@@ -1,0 +1,54 @@
+{# src/DATA/DataBundle/Resources/views/Artwork/index.html.twig #}
+ 
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}
+    View waiting fetch - {{ parent() }}
+{% endblock %} 
+    
+{% block h1 %}
+    View waiting fetch
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li class="active">View waiting fetch</li>
+{% endblock %}
+
+{% block h1_extend %}
+    <a class="btn btn-primary" href="{{ path('admin_entity_processFetch') }}">Process Fetch</a>
+{% endblock %}
+    
+{% block content %}
+    <div class="row">
+        <section class="col-md-12">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert col-md-12 alert-success">
+                    {{ flashMessage }}
+                </div>
+                <br />
+            {% endfor %}
+
+            <table class="table table-striped table-bordered">
+                <caption>{{ entities.getTotalItemCount }} entities</caption>
+                <tr>
+                    <th>#</th>
+                    <th>URI</th>
+                </tr>
+                {% for entity in entities %}
+                    <tr>
+                        <td>{{ ((entities.getPaginationData.current-1)*100)+loop.index }}</td>
+                        <td>
+                            {{ entity.uri }} <a href="{{ entity.uri }}" target="_blank"><i class="fa fa-external-link"></i></a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">No entity waiting</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="text-center">{{ knp_pagination_render(entities) }}</div>
+        </section>
+    </div>
+{% endblock %}

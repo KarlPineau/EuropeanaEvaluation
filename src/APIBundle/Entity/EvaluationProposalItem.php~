@@ -1,0 +1,51 @@
+<?php
+
+namespace APIBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * EvaluationProposalItem
+ *
+ * @ORM\Table(name="evaluation_proposal_item")
+ * @ORM\Entity(repositoryClass="APIBundle\Repository\EvaluationProposalItemRepository")
+ */
+class EvaluationProposalItem
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="APIBundle\Entity\EvaluationProposal")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $proposal;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="item", type="string", length=255)
+     */
+    private $item;
+
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+
