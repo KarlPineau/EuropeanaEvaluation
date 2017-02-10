@@ -10,4 +10,13 @@ namespace EntityBundle\Repository;
  */
 class EntityRelationRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getUnusedEntity($ids)
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        $qb ->where($qb->expr()->notIn('entity1', $ids));
+
+        return $qb->getQuery()
+            ->getResult();
+    }
 }

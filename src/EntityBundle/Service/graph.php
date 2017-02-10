@@ -28,4 +28,15 @@ class graph
 
         return $object;
     }
+
+    public function buildObjectById($europeana_id)
+    {
+        $object = array();
+
+        foreach($this->em->getRepository('EntityBundle:EntityProperty')->findBy(array('europeanaId' => $europeana_id)) as $EntityProperty) {
+            $object[$EntityProperty->getProperty()] = json_decode($EntityProperty->getValue());
+        }
+
+        return $object;
+    }
 }

@@ -30,4 +30,20 @@ messenger_proposal_index:
         authToken: "8u0QYy8OTLVKZK8"
         experiment_sequence_id: \d+
 
+# ProposalSingle
+messenger_proposal_single_index:
+    path:     /proposal/single/{authToken}/{experiment_proposal_single_id}
+    defaults: { _controller: MessengerBundle:ProposalSingle:index }
+    requirements:
+        authToken: "8u0QYy8OTLVKZK8"
+        experiment_proposal_single_id: \d+
+
+messenger_proposal_single_validation:
+    path:     /proposal/single/validation/{authToken}/{experiment_proposal_single_id}/{value}
+    defaults: { _controller: MessengerBundle:ProposalSingle:validation }
+    requirements:
+        authToken: "8u0QYy8OTLVKZK8"
+        experiment_proposal_single_id: \d+
+        value: \d+
+
 

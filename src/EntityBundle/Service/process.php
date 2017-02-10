@@ -111,6 +111,7 @@ class process
         $object['edmIsShownBy']     = $this->getProperty($this->getAggregation($record), "edmIsShownBy");
         $object['edmProvider']      = $this->getProperty($this->getAggregation($record), "edmProvider");
         $object['edmRights']        = $this->getProperty($this->getAggregation($record), "edmRights");
+        $object['dcDescription']    = $this->getProperty($this->getProxy($record, false), "dcDescription");
         $object['dcContributor']    = $this->getProperty($this->getProxy($record, false), "dcContributor");
         $object['dcCreator']        = $this->getProperty($this->getProxy($record, false), "dcCreator");
         $object['dcFormat']         = $this->getProperty($this->getProxy($record, false), "dcFormat");

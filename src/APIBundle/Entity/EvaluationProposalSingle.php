@@ -44,6 +44,13 @@ class EvaluationProposalSingle
     private $suggestedItem;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="rateValue", type="integer", nullable=true)
+     */
+    private $rateValue;
+
+    /**
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
@@ -156,5 +163,29 @@ class EvaluationProposalSingle
     public function getSequence()
     {
         return $this->sequence;
+    }
+
+    /**
+     * Set rateValue
+     *
+     * @param integer $rateValue
+     *
+     * @return EvaluationProposalSingle
+     */
+    public function setRateValue($rateValue)
+    {
+        $this->rateValue = $rateValue;
+
+        return $this;
+    }
+
+    /**
+     * Get rateValue
+     *
+     * @return integer
+     */
+    public function getRateValue()
+    {
+        return $this->rateValue;
     }
 }

@@ -17,4 +17,4 @@ services:
 
     api.proposal_single:
         class: EntityBundle\Service\proposalSingle
-        arguments: [ "@doctrine.orm.entity_manager", "@buzz"]
+        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@api.sequence"]

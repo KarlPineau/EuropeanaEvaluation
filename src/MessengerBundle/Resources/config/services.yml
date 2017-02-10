@@ -1,4 +1,4 @@
 services:
-#    messenger.example:
-#        class: MessengerBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    messenger.stringify:
+        class: MessengerBundle\Service\stringify
+        arguments: [ "@doctrine.orm.entity_manager", "@buzz"]
