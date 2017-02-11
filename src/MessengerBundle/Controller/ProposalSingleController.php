@@ -144,7 +144,7 @@ class ProposalSingleController extends Controller
                     ["text" => "This is the message of the sequence set. Need to explicit here the rules of parameters"],
                 ]
             ];
-            
+
             $response = new Response(json_encode($messages));
             $response->headers->set('Content-Type', 'application/json');
             return $response;

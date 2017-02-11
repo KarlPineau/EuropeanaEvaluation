@@ -29,4 +29,28 @@ class SessionController extends Controller
             return $this->redirectToRoute('messenger_system_restart');
         }
     }
+
+    public function loadAction($experiment_session_id)
+    {
+        try {
+            $session = $this->get('api.session')->get($experiment_session_id);
+            if($session == null) {return $this->redirectToRoute('messenger_system_restart');}
+
+            $messages = [
+                "set_attributes" =>
+                    [
+                        "experiment_session_id" => $session->getId(),
+                    ],
+                "messages" => [
+                    ["text" => "Continue session ".$session->getId()],
+                ]
+            ];
+
+            $response = new Response(json_encode($messages));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        } catch(\Exception $e) {
+            return $this->redirectToRoute('messenger_system_restart');
+        }
+    }
 }

@@ -14,6 +14,13 @@ messenger_session_index:
         user_ref: \S{0,255}
         user_timezone: \S{0,255}
 
+messenger_session_load:
+    path:     /session/{authToken}/{experiment_session_id}
+    defaults: { _controller: MessengerBundle:Session:load }
+    requirements:
+        authToken: "8u0QYy8OTLVKZK8"
+        experiment_session_id: \d+
+
 # Sequence
 messenger_sequence_index:
     path:     /sequence/{authToken}/{experiment_session_id}
