@@ -3,10 +3,10 @@ messenger_system_restart:
     path:     /system/restart
     defaults: { _controller: MessengerBundle:System:restart }
 
-# Session
-messenger_session_index:
-    path:     /session/{authToken}/{user_id}/{user_locale}/{user_ref}/{user_timezone}
-    defaults: { _controller: MessengerBundle:Session:index }
+# User
+messenger_user_index:
+    path:     /user/{authToken}/{user_id}/{user_locale}/{user_ref}/{user_timezone}
+    defaults: { _controller: MessengerBundle:User:index }
     requirements:
         authToken: "8u0QYy8OTLVKZK8"
         user_id: \S{0,255}
@@ -14,28 +14,28 @@ messenger_session_index:
         user_ref: \S{0,255}
         user_timezone: \S{0,255}
 
-messenger_session_load:
-    path:     /session/{authToken}/{experiment_session_id}
-    defaults: { _controller: MessengerBundle:Session:load }
+messenger_user_load:
+    path:     /user/{authToken}/{experiment_user_id}
+    defaults: { _controller: MessengerBundle:User:load }
     requirements:
         authToken: "8u0QYy8OTLVKZK8"
-        experiment_session_id: \d+
+        experiment_user_id: \d+
 
-# Sequence
-messenger_sequence_index:
-    path:     /sequence/{authToken}/{experiment_session_id}
-    defaults: { _controller: MessengerBundle:Sequence:index }
+# Session
+messenger_session_index:
+    path:     /session/{authToken}/{experiment_user_id}
+    defaults: { _controller: MessengerBundle:Session:index }
     requirements:
         authToken: "8u0QYy8OTLVKZK8"
-        experiment_session_id: \d+
+        experiment_user_id: \d+
 
 # Proposal
 messenger_proposal_index:
-    path:     /proposal/{authToken}/{experiment_sequence_id}
+    path:     /proposal/{authToken}/{experiment_session_id}
     defaults: { _controller: MessengerBundle:Proposal:index }
     requirements:
         authToken: "8u0QYy8OTLVKZK8"
-        experiment_sequence_id: \d+
+        experiment_session_id: \d+
 
 # ProposalSingle
 messenger_proposal_single_index:

@@ -7,19 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $sessionsQuery = $em->getRepository('APIBundle:EvaluationSession')->findAll();
-
-        $sessions = $this->get('knp_paginator')->paginate(
-            $sessionsQuery,
-            $request->query->get('page', 1),
-            300
-        );
-
-        return $this->render('AdminBundle:Home:index.html.twig', array(
-            'sessions' => $sessions
-        ));
+        return $this->render('AdminBundle:Home:index.html.twig');
     }
 }

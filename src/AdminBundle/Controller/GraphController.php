@@ -12,15 +12,29 @@ class GraphController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('EntityBundle:EntityFetch')->findByProcessed(true);
+        $entities = $em->getRepository('EntityBundle:EntityProperty')->getAll();
 
         $objects = array();
-        foreach($entities as $entityFetch) {
-            $objects[] = $this->get('entity.graph')->buildObject($entityFetch->getUri());
+        foreach($entities as $europeana_id) {
+            $objects[] = $this->get('entity.graph')->buildObject($europeana_id);
         }
 
         return $this->render('AdminBundle:Graph:index.html.twig', array(
             'objects' => $objects
         ));
+    }
+
+    public function removeAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('EntityBundle:EntityProperty')->findAll();
+
+        foreach($entities as $entity) {
+            $em->remove($entity);
+        }
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('notice', 'The graph has been removing.' );
+        return $this->redirect($this->generateUrl('admin_home_index'));
     }
 }

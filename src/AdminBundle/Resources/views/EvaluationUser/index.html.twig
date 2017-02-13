@@ -1,0 +1,79 @@
+{# src/DATA/DataBundle/Resources/views/Artwork/index.html.twig #}
+ 
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}
+    EvaluationUsers - {{ parent() }}
+{% endblock %} 
+    
+{% block h1 %}
+    EvaluationUsers
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li class="active">EvaluationUsers</li>
+{% endblock %}
+
+{% block h1_extend %}
+{% endblock %}
+    
+{% block content %}
+    <div class="row">
+        <section class="col-md-12">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert col-md-12 alert-success">
+                    {{ flashMessage }}
+                </div>
+                <br />
+            {% endfor %}
+
+            <table class="table table-striped table-bordered">
+                <caption>{{ users.getTotalItemCount }} users</caption>
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Context</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ ((users.getPaginationData.current-1)*100)+loop.index }}</td>
+                        <td>
+                            {% if user.context == "facebook_messenger" %}
+                            <dl class="dl-horizontal">
+                                <dt>Fb ID</dt>
+                                <dd>{{ user.createUserFacebookId }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Fb Locale</dt>
+                                <dd>{{ user.createUserFacebookLocale }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Fb Ref</dt>
+                                <dd>{{ user.createUserFacebookRef }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Fb Timezone</dt>
+                                <dd>{{ user.createUserFacebookTimezone }}</dd>
+                            </dl>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.context }}</td>
+                        <td>{{ user.createDate|date('m-d-Y') }}</td>
+                        <td>
+                            <a href="{{ path('admin_evaluation_user_view', {'user_id': user.id}) }}" class="btn btn-sm btn-primary"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                            <a href="{{ path('api_user_remove', {'user_id': user.id}) }}" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i></a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">No users</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="text-center">{{ knp_pagination_render(users) }}</div>
+        </section>
+    </div>
+{% endblock %}

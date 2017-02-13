@@ -34,6 +34,7 @@
                 <tr>
                     <th>#</th>
                     <th>URI</th>
+                    <th>euroepana_id</th>
                 </tr>
                 {% for entity in entities %}
                     <tr>
@@ -41,6 +42,7 @@
                         <td>
                             {{ entity.uri }} <a href="{{ entity.uri }}" target="_blank"><i class="fa fa-external-link"></i></a>
                         </td>
+                        <td>{{ entity_process.getEuropeanaId(entity.uri) }}</td>
                     </tr>
                 {% else %}
                     <tr>

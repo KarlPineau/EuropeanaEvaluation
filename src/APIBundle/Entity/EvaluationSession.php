@@ -24,53 +24,32 @@ class EvaluationSession
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="context", type="string", nullable=true)
+     * @ORM\ManyToOne(targetEntity="APIBundle\Entity\EvaluationUser")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $context;
+    private $user;
+
+    /**
+     * @var string
+     * Describe the evaluation type: can be the first experience or the second experience
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     */
+    private $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="createUserFacebookId", type="string", nullable=true)
+     * @ORM\Column(name="contextualized", type="boolean", nullable=true, options="default: false;")
      */
-    private $createUserFacebookId;
+    private $contextualized;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="createUserFacebookLocale", type="string", nullable=true)
+     * @ORM\Column(name="referenceItem", type="string", length=255, nullable=true)
      */
-    private $createUserFacebookLocale;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="createUserFacebookRef", type="string", nullable=true)
-     */
-    private $createUserFacebookRef;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="createUserFacebookTimezone", type="string", nullable=true)
-     */
-    private $createUserFacebookTimezone;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="createUserIp", type="string", length=255, nullable=true)
-     */
-    private $createUserIp;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="createUserMail", type="string", length=255, nullable=true)
-     */
-    private $createUserMail;
+    private $referenceItem;
 
     /**
      * @var \DateTime
@@ -81,11 +60,11 @@ class EvaluationSession
     private $createDate;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="HTTPUSERAGENT", type="string", length=255, nullable=true)
+     * @ORM\Column(name="endDate", type="datetime", nullable=true)
      */
-    protected $HTTP_USER_AGENT;
+    protected $endDate;
 
 
     /**
@@ -99,147 +78,75 @@ class EvaluationSession
     }
 
     /**
-     * Set createUserFacebookId
+     * Set type
      *
-     * @param string $createUserFacebookId
+     * @param string $type
      *
      * @return EvaluationSession
      */
-    public function setCreateUserFacebookId($createUserFacebookId)
+    public function setType($type)
     {
-        $this->createUserFacebookId = $createUserFacebookId;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get createUserFacebookId
+     * Get type
      *
      * @return string
      */
-    public function getCreateUserFacebookId()
+    public function getType()
     {
-        return $this->createUserFacebookId;
+        return $this->type;
     }
 
     /**
-     * Set createUserFacebookLocale
+     * Set contextualized
      *
-     * @param string $createUserFacebookLocale
+     * @param boolean $contextualized
      *
      * @return EvaluationSession
      */
-    public function setcreateUserFacebookLocale($createUserFacebookLocale)
+    public function setContextualized($contextualized)
     {
-        $this->createUserFacebookLocale = $createUserFacebookLocale;
+        $this->contextualized = $contextualized;
 
         return $this;
     }
 
     /**
-     * Get createUserFacebookLocale
+     * Get contextualized
      *
-     * @return string
+     * @return boolean
      */
-    public function getcreateUserFacebookLocale()
+    public function getContextualized()
     {
-        return $this->createUserFacebookLocale;
+        return $this->contextualized;
     }
 
     /**
-     * Set createUserFacebookRef
+     * Set referenceItem
      *
-     * @param string $createUserFacebookRef
+     * @param string $referenceItem
      *
      * @return EvaluationSession
      */
-    public function setCreateUserFacebookRef($createUserFacebookRef)
+    public function setReferenceItem($referenceItem)
     {
-        $this->createUserFacebookRef = $createUserFacebookRef;
+        $this->referenceItem = $referenceItem;
 
         return $this;
     }
 
     /**
-     * Get createUserFacebookRef
+     * Get referenceItem
      *
      * @return string
      */
-    public function getCreateUserFacebookRef()
+    public function getReferenceItem()
     {
-        return $this->createUserFacebookRef;
-    }
-
-    /**
-     * Set createUserFacebookTimezone
-     *
-     * @param string $createUserFacebookTimezone
-     *
-     * @return EvaluationSession
-     */
-    public function setCreateUserFacebookTimezone($createUserFacebookTimezone)
-    {
-        $this->createUserFacebookTimezone = $createUserFacebookTimezone;
-
-        return $this;
-    }
-
-    /**
-     * Get createUserFacebookTimezone
-     *
-     * @return string
-     */
-    public function getCreateUserFacebookTimezone()
-    {
-        return $this->createUserFacebookTimezone;
-    }
-
-    /**
-     * Set createUserIp
-     *
-     * @param string $createUserIp
-     *
-     * @return EvaluationSession
-     */
-    public function setCreateUserIp($createUserIp)
-    {
-        $this->createUserIp = $createUserIp;
-
-        return $this;
-    }
-
-    /**
-     * Get createUserIp
-     *
-     * @return string
-     */
-    public function getCreateUserIp()
-    {
-        return $this->createUserIp;
-    }
-
-    /**
-     * Set createUserMail
-     *
-     * @param string $createUserMail
-     *
-     * @return EvaluationSession
-     */
-    public function setCreateUserMail($createUserMail)
-    {
-        $this->createUserMail = $createUserMail;
-
-        return $this;
-    }
-
-    /**
-     * Get createUserMail
-     *
-     * @return string
-     */
-    public function getCreateUserMail()
-    {
-        return $this->createUserMail;
+        return $this->referenceItem;
     }
 
     /**
@@ -249,7 +156,7 @@ class EvaluationSession
      *
      * @return EvaluationSession
      */
-    public function setcreateDate($createDate)
+    public function setCreateDate($createDate)
     {
         $this->createDate = $createDate;
 
@@ -261,56 +168,56 @@ class EvaluationSession
      *
      * @return \DateTime
      */
-    public function getcreateDate()
+    public function getCreateDate()
     {
         return $this->createDate;
     }
 
     /**
-     * Set hTTPUSERAGENT
+     * Set endDate
      *
-     * @param string $hTTPUSERAGENT
+     * @param \DateTime $endDate
      *
      * @return EvaluationSession
      */
-    public function setHTTPUSERAGENT($hTTPUSERAGENT)
+    public function setEndDate($endDate)
     {
-        $this->HTTP_USER_AGENT = $hTTPUSERAGENT;
+        $this->endDate = $endDate;
 
         return $this;
     }
 
     /**
-     * Get hTTPUSERAGENT
+     * Get endDate
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getHTTPUSERAGENT()
+    public function getEndDate()
     {
-        return $this->HTTP_USER_AGENT;
+        return $this->endDate;
     }
 
     /**
-     * Set context
+     * Set user
      *
-     * @param string $context
+     * @param \APIBundle\Entity\EvaluationUser $user
      *
      * @return EvaluationSession
      */
-    public function setContext($context)
+    public function setUser(\APIBundle\Entity\EvaluationUser $user = null)
     {
-        $this->context = $context;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get context
+     * Get user
      *
-     * @return string
+     * @return \APIBundle\Entity\EvaluationUser
      */
-    public function getContext()
+    public function getUser()
     {
-        return $this->context;
+        return $this->user;
     }
 }

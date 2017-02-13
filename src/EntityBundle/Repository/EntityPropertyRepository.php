@@ -19,4 +19,15 @@ class EntityPropertyRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()
                   ->getResult();
     }
+
+    public function getAll()
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        $qb ->select('e.europeanaId')
+            ->distinct();
+
+        return $qb->getQuery()
+                  ->getResult();
+    }
 }

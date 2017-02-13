@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SystemController extends Controller
 {
-    public function restart()
+    public function restartAction()
     {
         $messages = [
             "messages" => [

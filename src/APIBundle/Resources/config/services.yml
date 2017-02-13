@@ -1,20 +1,25 @@
 services:
-    api.session:
-        class: EntityBundle\Service\session
+    api.user:
+        class: APIBundle\Service\user
         arguments: [ "@doctrine.orm.entity_manager", "@buzz"]
 
-    api.sequence:
-        class: EntityBundle\Service\sequence
+    api.session:
+        class: APIBundle\Service\session
         arguments: [ "@doctrine.orm.entity_manager", "@buzz"]
 
     api.proposal_browse:
-        class: EntityBundle\Service\proposalBrowse
-        arguments: [ "@doctrine.orm.entity_manager", "@buzz"]
+        class: APIBundle\Service\proposalBrowse
+        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@api.proposal_browse_item"]
 
-    api.proposal_browse_items:
-        class: EntityBundle\Service\proposalBrowseItems
+    api.proposal_browse_item:
+        class: APIBundle\Service\proposalBrowseItem
         arguments: [ "@doctrine.orm.entity_manager", "@buzz"]
 
     api.proposal_single:
-        class: EntityBundle\Service\proposalSingle
-        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@api.sequence"]
+        class: APIBundle\Service\proposalSingle
+        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@api.session"]
+
+    api.log:
+        class: APIBundle\Service\log
+        arguments: [ "@doctrine.orm.entity_manager"]
+

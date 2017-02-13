@@ -1,6 +1,6 @@
 <?php
 
-namespace EntityBundle\Service;
+namespace APIBundle\Service;
 
 use APIBundle\Entity\EvaluationProposalSingle;
 use Doctrine\ORM\EntityManager;
@@ -9,19 +9,19 @@ class proposalSingle
 {
     protected $em;
     protected $buzz;
-    protected $sequence;
+    protected $session;
 
-    public function __construct(EntityManager $EntityManager, $buzz, sequence $sequence)
+    public function __construct(EntityManager $EntityManager, $buzz, session $session)
     {
         $this->em = $EntityManager;
         $this->buzz = $buzz;
-        $this->sequence = $sequence;
+        $this->session = $session;
     }
 
-    public function create($sequence)
+    public function create($session)
     {
         $proposal = new EvaluationProposalSingle();
-        $proposal->setSequence($sequence);
+        $proposal->setSession($session);
 
         $entityRelation = $this->getEntityRelation($proposal);
         if($entityRelation != null) {
@@ -42,9 +42,15 @@ class proposalSingle
         return $this->em->getRepository('APIBundle:EvaluationProposalSingle')->findOneById($id);
     }
 
-    public function getBySequence($sequence)
+    public function getBySession($session)
     {
-        return $this->em->getRepository('APIBundle:EvaluationProposalSingle')->findBySequence($sequence);
+        return $this->em->getRepository('APIBundle:EvaluationProposalSingle')->findBySession($session);
+    }
+
+    public function remove($proposal)
+    {
+        $this->em->remove($proposal);
+        $this->em->flush();
     }
 
     public function getEntityRelation($proposal)
@@ -66,19 +72,23 @@ class proposalSingle
 
     public function checkEntityRelation($entityRelation, $proposal)
     {
-        foreach ($this->sequence->getBySession($proposal->getSequence()->getSession()) as $sequence) {
-            foreach ($this->getBySequence($sequence) as $proposalSingleOccurrence) {
+        $return = true;
+
+        foreach ($this->session->getByUser($proposal->getSession()->getUser()) as $session) {
+            foreach ($this->getBySession($session) as $proposalSingleOccurrence) {
                 $item1 = $proposalSingleOccurrence->getReferenceItem();
                 $item2 = $proposalSingleOccurrence->getSuggestedItem();
-                $entityRelationItem1 = $entityRelation->getItem1();
-                $entityRelationItem2 = $entityRelation->getItem2();
+                $entityRelationItem1 = $entityRelation->getEntity1();
+                $entityRelationItem2 = $entityRelation->getEntity2();
 
                 if(($item1 == $entityRelationItem1 AND $item2 == $entityRelationItem2) OR ($item2 == $entityRelationItem1 AND $item1 == $entityRelationItem2)) {
-                    return false;
+                    $return = false;
                 } else {
-                    return true;
+                    $return = true;
                 }
             }
         }
+
+        return $return;
     }
 }

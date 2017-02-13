@@ -1,0 +1,77 @@
+{# src/DATA/DataBundle/Resources/views/Artwork/index.html.twig #}
+ 
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}
+    EvaluationUsers - {{ parent() }}
+{% endblock %} 
+    
+{% block h1 %}
+    EvaluationUsers
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+    <li class="active">EvaluationUsers</li>
+{% endblock %}
+
+{% block h1_extend %}
+{% endblock %}
+    
+{% block content %}
+    <div class="row">
+        <section class="col-md-12">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert col-md-12 alert-success">
+                    {{ flashMessage }}
+                </div>
+                <br />
+            {% endfor %}
+
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-sm-6">
+                        {% if user.context == "facebook_messenger" %}
+                            <dl class="dl-horizontal">
+                                <dt>Fb ID</dt>
+                                <dd>{{ user.createUserFacebookId }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Fb Locale</dt>
+                                <dd>{{ user.createUserFacebookLocale }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Fb Ref</dt>
+                                <dd>{{ user.createUserFacebookRef }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Fb Timezone</dt>
+                                <dd>{{ user.createUserFacebookTimezone }}</dd>
+                            </dl>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-6">
+                        <dl class="dl-horizontal">
+                            <dt>Context</dt>
+                            <dd>{{ user.context }}</dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Creation Date</dt>
+                            <dd>{{ user.createDate|date('Y-m-d H:i:s') }}</dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Remove User</dt>
+                            <dd><a href="{{ path('api_user_remove', {'user_id': user.id}) }}" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i> (no way back)</a></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            {% for session in api_session.getByUser(user) %}
+                {% include 'AdminBundle:EvaluationUser:view-session-tpl.html.twig' %}
+            {% else %}
+            <div class="alert alert-warning">This user is empty</div>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}

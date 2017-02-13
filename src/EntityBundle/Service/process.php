@@ -2,6 +2,7 @@
 
 namespace EntityBundle\Service;
 
+use APIBundle\Service\log;
 use Doctrine\ORM\EntityManager;
 use EntityBundle\Entity\EntityProperty;
 
@@ -9,11 +10,101 @@ class process
 {
     protected $em;
     protected $buzz;
+    protected $log;
+    protected $graph;
 
-    public function __construct(EntityManager $EntityManager, $buzz)
+    public function __construct(EntityManager $EntityManager, $buzz, log $log, graph $graph)
     {
         $this->em = $EntityManager;
         $this->buzz = $buzz;
+        $this->log = $log;
+        $this->graph = $graph;
+    }
+
+    public function process($uri)
+    {
+        $this->log->log("------------------------------------------------------------------");
+        $this->log->log("-> entity.process->process() -- ".date('Y/m/d h:i:s a', time()));
+
+        try {
+            $this->log->log("URI: ".$uri);
+            if($this->checkIsset($this->getEuropeanaId($uri)) == false) {
+                $this->log->log("Isset Item ? NO");
+                $record = $this->registerRecord($this->buildRecord($this->getRecord($this->getEuropeanaId($uri))));
+                return $record;
+            } else {
+                $this->log->log("Isset Item ? YES");
+                return null;
+            }
+        } catch (\Exception $e) {
+            return null;
+        }
+
+    }
+
+    public function registerRecord($record)
+    {
+        $this->log->log("------------------------------------------------------------------");
+        $this->log->log("-> entity.process->registerRecord() -- ".date('Y/m/d h:i:s a', time()));
+
+        $europeana_id = $record['europeana_id'];
+        $this->log->log("Europeana_id: ".$europeana_id);
+        foreach($record as $property => $value) {
+            $entityProperty = new EntityProperty();
+            $entityProperty->setEuropeanaId($europeana_id);
+            $entityProperty->setProperty($property);
+
+            if($value != 'null' AND $value != null) {
+                $entityProperty->setValue(json_encode($value));
+            } else {
+                $entityProperty->setValue(null);
+            }
+
+            $this->log->log("EntityProperty: >".$europeana_id.">".$property.">".json_encode($value));
+            $this->em->persist($entityProperty);
+        }
+        $this->em->flush();
+
+        //$this->downloadThumbnail($record);
+
+        return $record;
+    }
+
+    public function buildRecord($record)
+    {
+        $this->log->log("------------------------------------------------------------------");
+        $this->log->log("-> entity.process->buildRecord() -- ".date('Y/m/d h:i:s a', time()));
+
+        $object = array();
+
+        $object['europeana_id']     = $this->getProperty($record, "about");
+        $object['edmDatasetName']   = $this->getProperty($record, "edmDatasetName");
+        $object['language']         = $this->getProperty($record, "language");
+        $object['edmDataProvider']  = $this->getProperty($this->getAggregation($record), "edmDataProvider");
+        $object['edmIsShownAt']     = $this->getProperty($this->getAggregation($record), "edmIsShownAt");
+        $object['edmIsShownBy']     = $this->getProperty($this->getAggregation($record), "edmIsShownBy");
+        $object['edmProvider']      = $this->getProperty($this->getAggregation($record), "edmProvider");
+        $object['edmRights']        = $this->getProperty($this->getAggregation($record), "edmRights");
+        $object['edmObject']        = $this->getProperty($this->getAggregation($record), "edmObject");
+        $object['dcDescription']    = $this->getProperty($this->getProxy($record, false), "dcDescription");
+        $object['dcContributor']    = $this->getProperty($this->getProxy($record, false), "dcContributor");
+        $object['dcCreator']        = $this->getProperty($this->getProxy($record, false), "dcCreator");
+        $object['dcFormat']         = $this->getProperty($this->getProxy($record, false), "dcFormat");
+        $object['dcLanguage']       = $this->getProperty($this->getProxy($record, false), "dcLanguage");
+        $object['dcPublisher']      = $this->getProperty($this->getProxy($record, false), "dcPublisher");
+        $object['dcSubject']        = $this->getProperty($this->getProxy($record, false), "dcSubject");
+        $object['dcTitle']          = $this->getProperty($this->getProxy($record, false), "dcTitle");
+        $object['dcType']           = $this->getProperty($this->getProxy($record, false), "dcType");
+        $object['dctermsMedium']    = $this->getProperty($this->getProxy($record, false), "dctermsMedium");
+        $object['dctermsTemporal']  = $this->getProperty($this->getProxy($record, false), "dctermsTemporal");
+        $object['dctermsCreated']   = $this->getProperty($this->getProxy($record, false), "dctermsCreated");
+        $object['dctermsProvenance']= $this->getProperty($this->getProxy($record, false), "dctermsProvenance");
+        $object['dctermsSpatial']   = $this->getProperty($this->getProxy($record, false), "dctermsSpatial");
+        $object['edmType']          = $this->getProperty($this->getProxy($record, false), "edmType");
+        $object['edmPreview']       = $this->getProperty($this->getEuropeanaAggregation($record), "edmPreview");
+
+        $this->log->log("RECORD: ".json_encode($object));
+        return $object;
     }
 
     public function checkIsset($europeana_id)
@@ -23,12 +114,13 @@ class process
 
     public function getEuropeanaId($uri)
     {
-        return preg_replace('/http:\/\/www.europeana.eu\/portal\/fr\/record(\/90402\/RP_P_OB_27_072).html/i', '$1', $uri);
+        return preg_replace('/http:\/\/www.europeana.eu\/portal\/[a-zA-Z]{1,4}\/record\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9_]+).html/i', '/$1/$2', $uri);
 
     }
 
     public function getRecord($europeana_id)
     {
+        $this->buzz->getClient()->setTimeout(0);
         return json_decode($this->buzz->get('http://www.europeana.eu/api/v2/record'.$europeana_id.'.json?wskey=api2demo&profile=rich')->getContent())->object;
     }
 
@@ -82,6 +174,29 @@ class process
         return $aggregation;
     }
 
+    public function getEuropeanaAggregation($record)
+    {
+        $europeanaAggregation =  null;
+
+        if(gettype($record) == 'object') {
+            if (property_exists($record, 'europeanaAggregation')) {
+                if (count($record->europeanaAggregation) > 0) {
+                    $europeanaAggregation = $record->europeanaAggregation;
+                }
+            }
+        }
+
+        if(gettype($record) == 'array') {
+            if(array_key_exists('europeanaAggregation', $record)) {
+                if(count($record['europeanaAggregation']) > 0) {
+                    $europeanaAggregation = $record['europeanaAggregation'];
+                }
+            }
+        }
+
+        return $europeanaAggregation;
+    }
+
     public function getProperty($object, $property)
     {
         $value =  null;
@@ -99,70 +214,33 @@ class process
         return $value;
     }
 
-    public function buildRecord($record)
+    public function downloadThumbnail($record)
     {
-        $object = array();
+        $this->log->log("------------------------------------------------------------------");
+        $this->log->log("-> entity.process->downloadThumbnail() -- ".date('Y/m/d h:i:s a', time()));
+        $this->log->log("Record: ".$record['europeana_id']);
 
-        $object['europeana_id']     = $this->getProperty($record, "about");
-        $object['edmDatasetName']   = $this->getProperty($record, "edmDatasetName");
-        $object['language']         = $this->getProperty($record, "language");
-        $object['edmDataProvider']  = $this->getProperty($this->getAggregation($record), "edmDataProvider");
-        $object['edmIsShownAt']     = $this->getProperty($this->getAggregation($record), "edmIsShownAt");
-        $object['edmIsShownBy']     = $this->getProperty($this->getAggregation($record), "edmIsShownBy");
-        $object['edmProvider']      = $this->getProperty($this->getAggregation($record), "edmProvider");
-        $object['edmRights']        = $this->getProperty($this->getAggregation($record), "edmRights");
-        $object['dcDescription']    = $this->getProperty($this->getProxy($record, false), "dcDescription");
-        $object['dcContributor']    = $this->getProperty($this->getProxy($record, false), "dcContributor");
-        $object['dcCreator']        = $this->getProperty($this->getProxy($record, false), "dcCreator");
-        $object['dcFormat']         = $this->getProperty($this->getProxy($record, false), "dcFormat");
-        $object['dcLanguage']       = $this->getProperty($this->getProxy($record, false), "dcLanguage");
-        $object['dcPublisher']      = $this->getProperty($this->getProxy($record, false), "dcPublisher");
-        $object['dcSubject']        = $this->getProperty($this->getProxy($record, false), "dcSubject");
-        $object['dcTitle']          = $this->getProperty($this->getProxy($record, false), "dcTitle");
-        $object['dcType']           = $this->getProperty($this->getProxy($record, false), "dcType");
-        $object['dctermsMedium']    = $this->getProperty($this->getProxy($record, false), "dctermsMedium");
-        $object['dctermsTemporal']  = $this->getProperty($this->getProxy($record, false), "dctermsTemporal");
-        $object['dctermsCreated']   = $this->getProperty($this->getProxy($record, false), "dctermsCreated");
-        $object['dctermsProvenance']= $this->getProperty($this->getProxy($record, false), "dctermsProvenance");
-        $object['dctermsSpatial']   = $this->getProperty($this->getProxy($record, false), "dctermsSpatial");
-        $object['edmType']          = $this->getProperty($this->getProxy($record, false), "edmType");
+        set_time_limit(0);
+        $thumbnail = $this->graph->getThumbnail($record);
+        $this->log->log("Set thumbnail as: ".$thumbnail);
 
-        return $object;
-    }
+        $this->log->log("Start File download");
+        $id = uniqid();
+        $ch = curl_init($thumbnail);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        $this->log->log("Start File Put Contents");
+        @file_put_contents('../media/thumbnails/'.$id.'.'.pathinfo($thumbnail)['extension'], $data);
+        $this->log->log("End File download as: ".'/media/thumbnails/'.$id.'.'.pathinfo($thumbnail)['extension']);
 
-    public function registerRecord($object)
-    {
-        $europeana_id = $object['europeana_id'];
-        foreach($object as $property => $value) {
-            $entityProperty = new EntityProperty();
-            $entityProperty->setEuropeanaId($europeana_id);
-            $entityProperty->setProperty($property);
-
-            if($value != 'null' AND $value != null) {
-                $entityProperty->setValue(json_encode($value));
-            } else {
-                $entityProperty->setValue(null);
-            }
-
-            $this->em->persist($entityProperty);
-        }
+        $this->log->log("Start Register EntityProperty");
+        $entityProperty = new EntityProperty();
+        $entityProperty->setEuropeanaId($record['europeana_id']);
+        $entityProperty->setProperty('thumbnail');
+        $entityProperty->setValue($id.'.'.pathinfo($thumbnail)['extension']);
+        $this->em->persist($entityProperty);
         $this->em->flush();
-
-        return $object;
-    }
-
-    public function process($uri)
-    {
-        try {
-            if($this->checkIsset($this->getEuropeanaId($uri)) == false) {
-                $record = $this->registerRecord($this->buildRecord($this->getRecord($this->getEuropeanaId($uri))));
-                return $record;
-            } else {
-                return null;
-            }
-        } catch (\Exception $e) {
-            return null;
-        }
-
+        $this->log->log("End Register EntityProperty");
     }
 }

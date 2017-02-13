@@ -1,0 +1,21 @@
+<div class="well">
+    <h2>Session #{{ loop.index }}</h2>
+
+    <dl class="dl-horizontal">
+        <dt>Start date</dt>
+        <dd>{{ session.createDate|date('Y-m-d H:i:s') }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>End date</dt>
+        <dd>{{ session.endDate|date('Y-m-d H:i:s') }}</dd>
+    </dl>
+
+    {% for proposalContainer in api_session.getProposals(session) %}
+        <hr />
+        {% if proposalContainer['proposal_type'] == 'singleEvaluation' %}{% include 'AdminBundle:EvaluationUser:view-session-singleEvaluation-tpl.html.twig' %}
+        {% elseif proposalContainer['proposal_type'] == 'browseEvaluation' %}{% include 'AdminBundle:EvaluationUser:view-session-browseEvaluation-tpl.html.twig' %}
+        {% endif %}
+    {% else %}
+        <div class="alert alert-warning">This session is empty</div>
+    {% endfor %}
+</div>

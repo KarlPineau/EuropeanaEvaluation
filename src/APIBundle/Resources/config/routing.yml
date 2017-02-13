@@ -1,0 +1,5 @@
+api_user_remove:
+    path:     /api/user/remove/{user_id}
+    defaults: { _controller: APIBundle:EvaluationUser:remove }
+    requirements:
+        user_id: \d+

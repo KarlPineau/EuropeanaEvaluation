@@ -1,0 +1,39 @@
+<h3>Proposal #{{ loop.index }}</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Creation Date</dt>
+        <dd>{{ proposalContainer['proposal'].createDate|date('Y-m-d H:i:s') }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Rate</dt>
+        <dd>{% if proposalContainer['proposal'].rateValue != null %}{{ proposalContainer['proposal'].rateValue }}{% else %}<span class="text-warning">NO VALUE</span>{% endif %}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Algorithm</dt>
+        <dd>{{ proposalContainer['proposal'].algorithm }}</dd>
+    </dl>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        {% set referenceItem = entity_graph.buildObject(proposalContainer['proposal'].referenceItem) %}
+        <div class="thumbnail">
+            <img src="{{ entity_graph.getThumbnail(referenceItem) }}" class="admin-img-entity" />
+            <div class="caption">
+                <h4>{{ messenger_stringify.stringify(referenceItem['dcTitle'], ', ', false) }}</h4>
+                <p>{{ messenger_stringify.stringify(referenceItem['dcDescription'], ', ', false) }}</p>
+                <p><a href="http://www.europeana.eu/portal/record{{ referenceItem['europeana_id'] }}.html" class="btn btn-default" target="_blank">View on Europeana</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        {% set suggestedItem = entity_graph.buildObject(proposalContainer['proposal'].suggestedItem) %}
+        <div class="thumbnail">
+            <img src="{{ entity_graph.getThumbnail(suggestedItem) }}" class="admin-img-entity" />
+            <div class="caption">
+                <h4>{{ messenger_stringify.stringify(suggestedItem['dcTitle'], ', ', false) }}</h4>
+                <p>{{ messenger_stringify.stringify(suggestedItem['dcDescription'], ', ', false) }}</p>
+                <p><a href="http://www.europeana.eu/portal/record{{ suggestedItem['europeana_id'] }}.html" class="btn btn-default" target="_blank">View on Europeana</a></p>
+            </div>
+        </div>
+    </div>
+</div>

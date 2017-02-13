@@ -1,0 +1,27 @@
+<div class="well">
+    <h3>Rate: {{ proposalContainer['proposal'].rateValue }}</h3>
+    <div class="row">
+        <div class="col-sm-6">
+            {% set referenceItem = entity_graph.buildObject(proposalContainer['proposal'].referenceItem) %}
+            <div class="thumbnail">
+                <img src="{{ messenger_stringify.stringify(referenceItem['edmIsShownBy'], ', ', false) }}" />
+                <div class="caption">
+                    <h4>{{ messenger_stringify.stringify(referenceItem['dcTitle'], ', ', false) }}</h4>
+                    <p>{{ messenger_stringify.stringify(referenceItem['dcDescription'], ', ', false) }}</p>
+                    <p><a href="http://www.europeana.eu/portal/record{{ referenceItem['europeana_id'] }}.html" class="btn btn-default" role="button">On Europeana</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            {% set suggestedItem = entity_graph.buildObject(proposalContainer['proposal'].suggestedItem) %}
+            <div class="thumbnail">
+                <img src="{{ messenger_stringify.stringify(suggestedItem['edmIsShownBy'], ', ', false) }}" />
+                <div class="caption">
+                    <h4>{{ messenger_stringify.stringify(suggestedItem['dcTitle'], ', ', false) }}</h4>
+                    <p>{{ messenger_stringify.stringify(suggestedItem['dcDescription'], ', ', false) }}</p>
+                    <p><a href="http://www.europeana.eu/portal/record{{ referenceItem['europeana_id'] }}.html" class="btn btn-default" role="button">On Europeana</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

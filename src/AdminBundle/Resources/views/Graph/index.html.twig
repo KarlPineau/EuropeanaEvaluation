@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block h1_extend %}
+    <a class="btn btn-sm btn-danger" href="{{ path('admin_graph_remove') }}"><i class="fa fa-remove"></i> Remove graph (no way back!)</a>
 {% endblock %}
     
 {% block content %}
@@ -28,7 +29,20 @@
                 <br />
             {% endfor %}
 
-            {{ dump(objects) }}
+            {% for object in objects %}
+                <div class="well">
+                    <img src="{{ entity_graph.getThumbnail(object) }}" style="max-height: 100px;" />
+                    {% for property, value in object %}
+                    <dl class="dl-horizontal">
+                        <dt>{{ property }}</dt>
+                        <dd>{{ messenger_stringify.stringify(value, ', ', false) }}</dd>
+                    </dl>
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-warning">No graph</div>
+            {% endfor %}
+
         </section>
     </div>
 {% endblock %}

@@ -25,7 +25,7 @@ class EntityController extends Controller
             }
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('notice', $count.' entities have been inserted correctly.' );
+            $this->get('session')->getFlashBag()->add('notice', $count.' entities have been inserting properly.' );
             return $this->redirect($this->generateUrl('admin_home_index'));
         }
 
@@ -56,19 +56,36 @@ class EntityController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('EntityBundle:EntityFetch')->findByProcessed(false);
 
-        $count = 0;
+        $countTrue = 0;
+        $countFalse = 0;
         foreach($entities as $entityFetch) {
             $record = $this->get('entity.process')->process($entityFetch->getUri());
             if($record != null) {
-                $count++;
+                $countTrue++;
                 $entityFetch->setProcessed(true);
 
                 $this->get('entity.similar_items')->computeSimilarity($record, 4);
+            } else {
+                $countFalse++;
             }
         }
         $em->flush();
 
-        $this->get('session')->getFlashBag()->add('notice', $count.' entities have been processed correctly.' );
+        $this->get('session')->getFlashBag()->add('notice', $countTrue.' entities have been processing properly. '.$countFalse.' entities haven\'t been processing.');
+        return $this->redirect($this->generateUrl('admin_home_index'));
+    }
+
+    public function resetFetchAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('EntityBundle:EntityFetch')->findByProcessed(true);
+
+        foreach($entities as $entity) {
+            $entity->setProcessed(false);
+        }
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('notice', 'The fetch list has been resetting properly.' );
         return $this->redirect($this->generateUrl('admin_home_index'));
     }
 }

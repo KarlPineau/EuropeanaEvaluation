@@ -24,10 +24,10 @@ class EvaluationProposalBrowse
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="APIBundle\Entity\EvaluationSequence")
+     * @ORM\ManyToOne(targetEntity="APIBundle\Entity\EvaluationSession")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $sequence;
+    private $session;
 
     /**
      * @ORM\ManyToOne(targetEntity="APIBundle\Entity\EvaluationProposalBrowseItem")
@@ -80,27 +80,27 @@ class EvaluationProposalBrowse
     }
 
     /**
-     * Set sequence
+     * Set session
      *
-     * @param \APIBundle\Entity\EvaluationSequence $sequence
+     * @param \APIBundle\Entity\EvaluationSession $session
      *
      * @return EvaluationProposal
      */
-    public function setSequence(\APIBundle\Entity\EvaluationSequence $sequence = null)
+    public function setSession(\APIBundle\Entity\EvaluationSession $session = null)
     {
-        $this->sequence = $sequence;
+        $this->session = $session;
 
         return $this;
     }
 
     /**
-     * Get sequence
+     * Get session
      *
-     * @return \APIBundle\Entity\EvaluationSequence
+     * @return \APIBundle\Entity\EvaluationSession
      */
-    public function getSequence()
+    public function getSession()
     {
-        return $this->sequence;
+        return $this->session;
     }
 
     /**

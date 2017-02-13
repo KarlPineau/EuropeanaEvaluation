@@ -1,12 +1,12 @@
 services:
     entity.process:
         class: EntityBundle\Service\process
-        arguments: [ "@doctrine.orm.entity_manager", "@buzz"]
+        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@api.log", "@entity.graph"]
 
     entity.graph:
         class: EntityBundle\Service\graph
-        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@entity.process"]
+        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@messenger.stringify"]
 
     entity.similar_items:
         class: EntityBundle\Service\similarItems
-        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@entity.process"]
+        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@api.log", "@entity.process", "@entity.graph", "@messenger.stringify"]
