@@ -10,4 +10,15 @@ namespace APIBundle\Repository;
  */
 class EvaluationSessionRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getReferenceItems($user)
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        $qb ->where('s.user = :user')
+            ->andWhere($qb->expr()->isNotNull('s.referenceItem'))
+            ->setParameter('user', $user);
+
+        return $qb->getQuery()
+                  ->getResult();
+    }
 }

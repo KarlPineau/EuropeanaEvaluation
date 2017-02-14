@@ -2,7 +2,6 @@
 
 namespace APIBundle\Service;
 
-use APIBundle\Entity\EvaluationProposal;
 use APIBundle\Entity\EvaluationProposalBrowse;
 use Doctrine\ORM\EntityManager;
 
@@ -21,13 +20,25 @@ class proposalBrowse
 
     public function create($session)
     {
+        $referenceItem  = ($this->getLastProposalBySession($session) != null AND $this->getLastProposalBySession($session)->getChoicedItem() != null)
+                        ? $this->getLastProposalBySession($session)->getChoicedItem()->getItem()
+                        : $session->getReferenceItem();
+
         $proposal = new EvaluationProposalBrowse();
         $proposal->setSession($session);
+        $proposal->setReferenceItem($referenceItem);
         $proposal->setChoicedItem(null);
+        $proposal->setChoiceNull(false);
         $this->em->persist($proposal);
-        $this->em->flush();
+        $proposalBrowseItems = $this->proposalBrowseItem->create($proposal, $referenceItem, $this->getReferenceItems($session));
 
-        return $proposal;
+        if($proposalBrowseItems != null OR $referenceItem != null) {
+            $this->em->flush();
+            return $proposal;
+        } else {
+            $this->em->clear();
+            return null;
+        }
     }
 
     public function get($id)
@@ -40,13 +51,29 @@ class proposalBrowse
         return $this->em->getRepository('APIBundle:EvaluationProposalBrowse')->findBySession($session);
     }
 
+    public function getLastProposalBySession($session)
+    {
+        $proposals = $this->em->getRepository('APIBundle:EvaluationProposalBrowse')->findBy(array('session' => $session), array('createDate' => 'DESC'));
+        return (count($proposals) > 0) ? $proposals[0] : null;
+    }
+
     public function remove($proposal)
     {
-        foreach($this->proposalBrowseItem->getByProposalBrowse() as $proposalBrowseItem) {
+        foreach($this->proposalBrowseItem->getByProposalBrowse($proposal) as $proposalBrowseItem) {
             $this->proposalBrowseItem->remove($proposalBrowseItem);
         }
 
         $this->em->remove($proposal);
         $this->em->flush();
+    }
+
+    public function getReferenceItems($session)
+    {
+        $referenceItems = [];
+        foreach($this->em->getRepository('APIBundle:EvaluationProposalBrowse')->findBy(array('session' => $session)) as $proposalBrowse) {
+            $referenceItems[] = $proposalBrowse->getReferenceItem();
+        }
+
+        return $referenceItems;
     }
 }

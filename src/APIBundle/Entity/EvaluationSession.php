@@ -31,7 +31,7 @@ class EvaluationSession
 
     /**
      * @var string
-     * Describe the evaluation type: can be the first experience or the second experience
+     * Describe the evaluation type: singleEvaluation or browseEvaluation
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
@@ -43,6 +43,13 @@ class EvaluationSession
      * @ORM\Column(name="contextualized", type="boolean", nullable=true, options="default: false;")
      */
     private $contextualized;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="endSession", type="boolean", nullable=true, options="default: false;")
+     */
+    private $endSession;
 
     /**
      * @var string
@@ -219,5 +226,29 @@ class EvaluationSession
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set endSession
+     *
+     * @param boolean $endSession
+     *
+     * @return EvaluationSession
+     */
+    public function setEndSession($endSession)
+    {
+        $this->endSession = $endSession;
+
+        return $this;
+    }
+
+    /**
+     * Get endSession
+     *
+     * @return boolean
+     */
+    public function getEndSession()
+    {
+        return $this->endSession;
     }
 }

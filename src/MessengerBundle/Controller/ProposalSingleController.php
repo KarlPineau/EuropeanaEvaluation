@@ -16,6 +16,8 @@ class ProposalSingleController extends Controller
             $referenceItem = (object) $this->get('entity.graph')->buildObject($proposalSingle->getReferenceItem());
             $suggestedItem = (object) $this->get('entity.graph')->buildObject($proposalSingle->getSuggestedItem());
 
+            $contextualizedInfo = ''; if($proposalSingle->getSession()->getContextualized() == true) {$contextualizedInfo .= 'CONTEXTUALIZED -- ';}
+
             $messages = [
                 "set_attributes" =>
                     [
@@ -34,7 +36,7 @@ class ProposalSingleController extends Controller
                                     [
                                         "title" => $this->get('messenger.stringify')->stringify($referenceItem->dcTitle, ', ', false),
                                         "image_url" => $this->get('entity.graph')->getThumbnail($referenceItem),
-                                        "subtitle" => $this->get('messenger.stringify')->stringify($referenceItem->dcDescription, ', ', false),
+                                        "subtitle" => $contextualizedInfo.$this->get('messenger.stringify')->stringify($referenceItem->dcDescription, ', ', false),
                                         "buttons" => [
                                             [
                                                 "type" => "web_url",
@@ -46,7 +48,7 @@ class ProposalSingleController extends Controller
                                     [
                                         "title" => $this->get('messenger.stringify')->stringify($suggestedItem->dcTitle, ', ', false),
                                         "image_url" => $this->get('entity.graph')->getThumbnail($suggestedItem),
-                                        "subtitle" => $this->get('messenger.stringify')->stringify($suggestedItem->dcDescription, ', ', false),
+                                        "subtitle" => $contextualizedInfo.$this->get('messenger.stringify')->stringify($suggestedItem->dcDescription, ', ', false),
                                         "buttons" => [
                                             [
                                                 "type" => "web_url",
@@ -60,57 +62,107 @@ class ProposalSingleController extends Controller
                         ]
                     ],
                     [
-                        "text" => "Please rate the similarity of these two items",
+                        "text" => "Please rate the value of this recommendation in your opinion:",
                         "quick_replies" => [
                             [
+                                "set_attributes" =>
+                                [
+                                    "evaluation_validation_type" => "single",
+                                    "evaluation_proposal_id" => $proposalSingle->getId(),
+                                    "evaluation_proposal_value" => "1",
+                                ],
                                 "title" => "1",
-                                "url" => "http://europeana-evaluation.karl-pineau.fr/messenger/proposal/single/validation/8u0QYy8OTLVKZK8/".$proposalSingle->getId()."/1",
-                                "type" => "json_plugin_url",
+                                "block_names" => ["3-Proposal-Validation"]
                             ],
                             [
+                                "set_attributes" =>
+                                    [
+                                        "evaluation_validation_type" => "single",
+                                        "evaluation_proposal_id" => $proposalSingle->getId(),
+                                        "evaluation_proposal_value" => "2",
+                                    ],
                                 "title" => "2",
-                                "url" => "http://europeana-evaluation.karl-pineau.fr/messenger/proposal/single/validation/8u0QYy8OTLVKZK8/".$proposalSingle->getId()."/2",
-                                "type" => "json_plugin_url",
+                                "block_names" => ["3-Proposal-Validation"]
                             ],
                             [
+                                "set_attributes" =>
+                                    [
+                                        "evaluation_validation_type" => "single",
+                                        "evaluation_proposal_id" => $proposalSingle->getId(),
+                                        "evaluation_proposal_value" => "3",
+                                    ],
                                 "title" => "3",
-                                "url" => "http://europeana-evaluation.karl-pineau.fr/messenger/proposal/single/validation/8u0QYy8OTLVKZK8/".$proposalSingle->getId()."/3",
-                                "type" => "json_plugin_url",
+                                "block_names" => ["3-Proposal-Validation"]
                             ],
                             [
+                                "set_attributes" =>
+                                    [
+                                        "evaluation_validation_type" => "single",
+                                        "evaluation_proposal_id" => $proposalSingle->getId(),
+                                        "evaluation_proposal_value" => "4",
+                                    ],
                                 "title" => "4",
-                                "url" => "http://europeana-evaluation.karl-pineau.fr/messenger/proposal/single/validation/8u0QYy8OTLVKZK8/".$proposalSingle->getId()."/4",
-                                "type" => "json_plugin_url",
+                                "block_names" => ["3-Proposal-Validation"]
                             ],
                             [
+                                "set_attributes" =>
+                                    [
+                                        "evaluation_validation_type" => "single",
+                                        "evaluation_proposal_id" => $proposalSingle->getId(),
+                                        "evaluation_proposal_value" => "5",
+                                    ],
                                 "title" => "5",
-                                "url" => "http://europeana-evaluation.karl-pineau.fr/messenger/proposal/single/validation/8u0QYy8OTLVKZK8/".$proposalSingle->getId()."/5",
-                                "type" => "json_plugin_url",
+                                "block_names" => ["3-Proposal-Validation"]
                             ],
                             [
+                                "set_attributes" =>
+                                    [
+                                        "evaluation_validation_type" => "single",
+                                        "evaluation_proposal_id" => $proposalSingle->getId(),
+                                        "evaluation_proposal_value" => "6",
+                                    ],
                                 "title" => "6",
-                                "url" => "http://europeana-evaluation.karl-pineau.fr/messenger/proposal/single/validation/8u0QYy8OTLVKZK8/".$proposalSingle->getId()."/6",
-                                "type" => "json_plugin_url",
+                                "block_names" => ["3-Proposal-Validation"]
                             ],
                             [
+                                "set_attributes" =>
+                                    [
+                                        "evaluation_validation_type" => "single",
+                                        "evaluation_proposal_id" => $proposalSingle->getId(),
+                                        "evaluation_proposal_value" => "7",
+                                    ],
                                 "title" => "7",
-                                "url" => "http://europeana-evaluation.karl-pineau.fr/messenger/proposal/single/validation/8u0QYy8OTLVKZK8/".$proposalSingle->getId()."/7",
-                                "type" => "json_plugin_url",
+                                "block_names" => ["3-Proposal-Validation"]
                             ],
                             [
+                                "set_attributes" =>
+                                    [
+                                        "evaluation_validation_type" => "single",
+                                        "evaluation_proposal_id" => $proposalSingle->getId(),
+                                        "evaluation_proposal_value" => "8",
+                                    ],
                                 "title" => "8",
-                                "url" => "http://europeana-evaluation.karl-pineau.fr/messenger/proposal/single/validation/8u0QYy8OTLVKZK8/".$proposalSingle->getId()."/8",
-                                "type" => "json_plugin_url",
+                                "block_names" => ["3-Proposal-Validation"]
                             ],
                             [
+                                "set_attributes" =>
+                                    [
+                                        "evaluation_validation_type" => "single",
+                                        "evaluation_proposal_id" => $proposalSingle->getId(),
+                                        "evaluation_proposal_value" => "9",
+                                    ],
                                 "title" => "9",
-                                "url" => "http://europeana-evaluation.karl-pineau.fr/messenger/proposal/single/validation/8u0QYy8OTLVKZK8/".$proposalSingle->getId()."/9",
-                                "type" => "json_plugin_url",
+                                "block_names" => ["3-Proposal-Validation"]
                             ],
                             [
+                                "set_attributes" =>
+                                    [
+                                        "evaluation_validation_type" => "single",
+                                        "evaluation_proposal_id" => $proposalSingle->getId(),
+                                        "evaluation_proposal_value" => "10",
+                                    ],
                                 "title" => "10",
-                                "url" => "http://europeana-evaluation.karl-pineau.fr/messenger/proposal/single/validation/8u0QYy8OTLVKZK8/".$proposalSingle->getId()."/10",
-                                "type" => "json_plugin_url",
+                                "block_names" => ["3-Proposal-Validation"]
                             ]
                         ]
                     ]
@@ -144,9 +196,19 @@ class ProposalSingleController extends Controller
                 "set_attributes" =>
                     [
                         "experiment_user_id" => $proposalSingle->getSession()->getUser()->getId(),
+                        "experiment_load_new_proposal" => "true",
                     ],
                 "messages" => [
-                    ["text" => "This is the message of the session set. Need to explicit here the rules of parameters"],
+                    [
+                        "text" => "Thanks for your answer :) Let's continue.",
+                        "quick_replies" => [
+                            [
+                                "type" => "show_block",
+                                "block_names" => ["1-User"],
+                                "title" => "Continue"
+                            ]
+                        ]
+                    ],
                 ]
             ];
 

@@ -44,7 +44,7 @@ class user
 
     public function getLastSession($user)
     {
-        $sessions = $this->em->getRepository('APIBundle:EvaluationSession')->findBy(array('user' => $user), array('createDate' => 'DESC'), 1);
+        $sessions = $this->em->getRepository('APIBundle:EvaluationSession')->findBy(array('user' => $user), array('createDate' => 'DESC'));
         if(count($sessions) > 0) {
             return $sessions[0];
         } else {

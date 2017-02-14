@@ -14,17 +14,17 @@ class log
         $this->em = $EntityManager;
     }
 
-    public function log($var)
+    public function log($var, $file)
     {
-        /* LOGGING */
         $fs = new \Symfony\Component\Filesystem\Filesystem();
-        if(!$fs->exists('logs.text')) {
-            $fs->dumpFile('logs.text', '');
+
+        if(!$fs->exists('../var/logs/'.$file.'.log')) {
+            $fs->dumpFile('../var/logs/'.$file.'.log', '');
         }
-        $contentLog = file_get_contents('logs.text');
+        $contentLog = file_get_contents('../var/logs/'.$file.'.log');
         $contentLog .= $var."\n";
-        try {$fs->dumpFile('logs.text', $contentLog);}
+
+        try {$fs->dumpFile('../var/logs/'.$file.'.log', $contentLog);}
         catch(IOException $e) {}
-        /* -- END LOGGING */
     }
 }

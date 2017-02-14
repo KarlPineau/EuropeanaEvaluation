@@ -24,9 +24,10 @@ class proposalSingle
         $proposal->setSession($session);
 
         $entityRelation = $this->getEntityRelation($proposal);
-        if($entityRelation != null) {
+        if($entityRelation != null AND $entityRelation->getEntity1() != null AND $entityRelation->getEntity2() != null AND $entityRelation->getAlgorithm()) {
             $proposal->setReferenceItem($entityRelation->getEntity1());
             $proposal->setSuggestedItem($entityRelation->getEntity2());
+            $proposal->setAlgorithm($entityRelation->getAlgorithm());
 
             $this->em->persist($proposal);
             $this->em->flush();
@@ -55,40 +56,30 @@ class proposalSingle
 
     public function getEntityRelation($proposal)
     {
-        $entityRelations = $this->em->getRepository('EntityBundle:EntityRelation')->findAll();
-        if(count($entityRelations) > 0) {
-            shuffle($entityRelations);
-            $selectedEntityRelation = $entityRelations[0];
-
-            if($this->checkEntityRelation($selectedEntityRelation, $proposal) == true) {
-                return $selectedEntityRelation;
-            } else {
-                return $this->getEntityRelation($proposal);
-            }
+        $entityRelationsId = [];
+        foreach($this->em->getRepository('EntityBundle:EntityRelation')->findAll() as $entityRelation) {
+            $entityRelationsId[] = $entityRelation->getId();
+        }
+        $usedEntityRelationsId = $this->getOldEntityRelations($proposal->getSession()->getUser());
+        $unusedEntityRelations = array_diff($entityRelationsId, $usedEntityRelationsId);
+        if(count($unusedEntityRelations) > 0) {
+            shuffle($unusedEntityRelations);
+            $id = $unusedEntityRelations[0];
+            return $this->em->getRepository('EntityBundle:EntityRelation')->findOneById($id);
         } else {
             return null;
         }
     }
 
-    public function checkEntityRelation($entityRelation, $proposal)
+    public function getOldEntityRelations($user)
     {
-        $return = true;
-
-        foreach ($this->session->getByUser($proposal->getSession()->getUser()) as $session) {
-            foreach ($this->getBySession($session) as $proposalSingleOccurrence) {
-                $item1 = $proposalSingleOccurrence->getReferenceItem();
-                $item2 = $proposalSingleOccurrence->getSuggestedItem();
-                $entityRelationItem1 = $entityRelation->getEntity1();
-                $entityRelationItem2 = $entityRelation->getEntity2();
-
-                if(($item1 == $entityRelationItem1 AND $item2 == $entityRelationItem2) OR ($item2 == $entityRelationItem1 AND $item1 == $entityRelationItem2)) {
-                    $return = false;
-                } else {
-                    $return = true;
-                }
+        $oldEntityRelations = [];
+        foreach ($this->session->getByUser($user) as $session) {
+            foreach($this->getBySession($session) as $proposalSingleOccurrence) {
+                $oldEntityRelations[] = $this->em->getRepository('EntityBundle:EntityRelation')->findOneBy(array('entity1' => $proposalSingleOccurrence->getReferenceItem(), 'entity2' => $proposalSingleOccurrence->getSuggestedItem()))->getId();
             }
         }
 
-        return $return;
+        return $oldEntityRelations;
     }
 }

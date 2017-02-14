@@ -1,27 +1,33 @@
 <div class="well">
-    <h3>Rate: {{ proposalContainer['proposal'].rateValue }}</h3>
+    {% set proposalBrowseItems = api_proposal_browse_item.getByProposalBrowse(proposalContainer['proposal']) %}
     <div class="row">
-        <div class="col-sm-6">
-            {% set referenceItem = entity_graph.buildObject(proposalContainer['proposal'].referenceItem) %}
-            <div class="thumbnail">
-                <img src="{{ messenger_stringify.stringify(referenceItem['edmIsShownBy'], ', ', false) }}" />
-                <div class="caption">
-                    <h4>{{ messenger_stringify.stringify(referenceItem['dcTitle'], ', ', false) }}</h4>
-                    <p>{{ messenger_stringify.stringify(referenceItem['dcDescription'], ', ', false) }}</p>
-                    <p><a href="http://www.europeana.eu/portal/record{{ referenceItem['europeana_id'] }}.html" class="btn btn-default" role="button">On Europeana</a></p>
+
+        {% if proposalBrowseItems|length == 0 %}
+            {% for proposalBrowseItem in proposalBrowseItems %}
+            <div class="col-sm-4">
+                {% set suggestedItem = entity_graph.buildObject(proposalBrowseItem.item) %}
+                <div class="thumbnail">
+                    <img src="{{ entity_graph.getThumbnail(suggestedItem) }}" class="admin-img-entity" />
+                    <div class="caption">
+                        <h4>{{ messenger_stringify.stringify(suggestedItem['dcTitle'], ', ', false) }}</h4>
+                        <p>{{ messenger_stringify.stringify(suggestedItem['dcDescription'], ', ', false) }}</p>
+                        <p><a href="http://www.europeana.eu/portal/record{{ suggestedItem['europeana_id'] }}.html" class="btn btn-default" target="_blank">View on Europeana</a> <span class="label label-primary">{{ proposalBrowseItem.algorithm }}</span></p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6">
-            {% set suggestedItem = entity_graph.buildObject(proposalContainer['proposal'].suggestedItem) %}
-            <div class="thumbnail">
-                <img src="{{ messenger_stringify.stringify(suggestedItem['edmIsShownBy'], ', ', false) }}" />
-                <div class="caption">
-                    <h4>{{ messenger_stringify.stringify(suggestedItem['dcTitle'], ', ', false) }}</h4>
-                    <p>{{ messenger_stringify.stringify(suggestedItem['dcDescription'], ', ', false) }}</p>
-                    <p><a href="http://www.europeana.eu/portal/record{{ referenceItem['europeana_id'] }}.html" class="btn btn-default" role="button">On Europeana</a></p>
+            {% endfor %}
+            <div class="col-sm-4">
+                <div class="thumbnail">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/Face-sad.svg" class="admin-img-entity" />
+                    <div class="caption">
+                        <h4>No interesting choices</h4>
+                        <p>Click here if you can't find any interesting item.</p>
+                    </div>
                 </div>
             </div>
-        </div>
+
+        {% else %}
+            <div class="alert alert-warning">No suggested items</div>
+        {% endif %}
     </div>
 </div>

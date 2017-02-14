@@ -24,16 +24,31 @@ class EvaluationProposalBrowse
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="APIBundle\Entity\EvaluationSequence")
+     * @ORM\ManyToOne(targetEntity="APIBundle\Entity\EvaluationSession")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $sequence;
+    private $session;
 
     /**
-     * @ORM\ManyToOne(targetEntity="APIBundle\Entity\EvaluationProposalItem")
+     * @ORM\ManyToOne(targetEntity="APIBundle\Entity\EvaluationProposalBrowseItem")
      * @ORM\JoinColumn(nullable=true)
      */
     private $choicedItem;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="choiceNull", type="boolean", nullable=true, options="default: false;")
+     */
+    private $choiceNull;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="referenceItem", type="string", length=255, nullable=true)
+     */
+    private $referenceItem;
+
 
     /**
      * @var \DateTime
@@ -80,37 +95,37 @@ class EvaluationProposalBrowse
     }
 
     /**
-     * Set sequence
+     * Set session
      *
-     * @param \APIBundle\Entity\EvaluationSequence $sequence
+     * @param \APIBundle\Entity\EvaluationSession $session
      *
      * @return EvaluationProposal
      */
-    public function setSequence(\APIBundle\Entity\EvaluationSequence $sequence = null)
+    public function setSession(\APIBundle\Entity\EvaluationSession $session = null)
     {
-        $this->sequence = $sequence;
+        $this->session = $session;
 
         return $this;
     }
 
     /**
-     * Get sequence
+     * Get session
      *
-     * @return \APIBundle\Entity\EvaluationSequence
+     * @return \APIBundle\Entity\EvaluationSession
      */
-    public function getSequence()
+    public function getSession()
     {
-        return $this->sequence;
+        return $this->session;
     }
 
     /**
      * Set choicedItem
      *
-     * @param \APIBundle\Entity\EvaluationProposalItem $choicedItem
+     * @param \APIBundle\Entity\EvaluationProposalBrowseItem $choicedItem
      *
      * @return EvaluationProposal
      */
-    public function setChoicedItem(\APIBundle\Entity\EvaluationProposalItem $choicedItem = null)
+    public function setChoicedItem(\APIBundle\Entity\EvaluationProposalBrowseItem $choicedItem = null)
     {
         $this->choicedItem = $choicedItem;
 
@@ -120,10 +135,34 @@ class EvaluationProposalBrowse
     /**
      * Get choicedItem
      *
-     * @return \APIBundle\Entity\EvaluationProposalItem
+     * @return \APIBundle\Entity\EvaluationProposalBrowseItem
      */
     public function getChoicedItem()
     {
         return $this->choicedItem;
+    }
+
+    /**
+     * Set referenceItem
+     *
+     * @param string $referenceItem
+     *
+     * @return EvaluationProposalBrowse
+     */
+    public function setReferenceItem($referenceItem)
+    {
+        $this->referenceItem = $referenceItem;
+
+        return $this;
+    }
+
+    /**
+     * Get referenceItem
+     *
+     * @return string
+     */
+    public function getReferenceItem()
+    {
+        return $this->referenceItem;
     }
 }

@@ -36,6 +36,21 @@ class EvaluationProposalBrowseItem
      */
     private $item;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="algorithm", type="string", length=255)
+     */
+    private $algorithm;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="createDate", type="datetime", nullable=false)
+     */
+    private $createDate;
+
 
 
     /**
@@ -94,5 +109,53 @@ class EvaluationProposalBrowseItem
     public function getProposal()
     {
         return $this->proposal;
+    }
+
+    /**
+     * Set algorithm
+     *
+     * @param string $algorithm
+     *
+     * @return EvaluationProposalBrowseItem
+     */
+    public function setAlgorithm($algorithm)
+    {
+        $this->algorithm = $algorithm;
+
+        return $this;
+    }
+
+    /**
+     * Get algorithm
+     *
+     * @return string
+     */
+    public function getAlgorithm()
+    {
+        return $this->algorithm;
+    }
+
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     *
+     * @return EvaluationProposalBrowseItem
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
     }
 }

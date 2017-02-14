@@ -36,6 +36,21 @@ class EvaluationProposalBrowse
     private $choicedItem;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="choiceNull", type="boolean", nullable=true, options="default: false;")
+     */
+    private $choiceNull;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="referenceItem", type="string", length=255, nullable=true)
+     */
+    private $referenceItem;
+
+
+    /**
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
@@ -125,5 +140,53 @@ class EvaluationProposalBrowse
     public function getChoicedItem()
     {
         return $this->choicedItem;
+    }
+
+    /**
+     * Set referenceItem
+     *
+     * @param string $referenceItem
+     *
+     * @return EvaluationProposalBrowse
+     */
+    public function setReferenceItem($referenceItem)
+    {
+        $this->referenceItem = $referenceItem;
+
+        return $this;
+    }
+
+    /**
+     * Get referenceItem
+     *
+     * @return string
+     */
+    public function getReferenceItem()
+    {
+        return $this->referenceItem;
+    }
+
+    /**
+     * Set choiceNull
+     *
+     * @param boolean $choiceNull
+     *
+     * @return EvaluationProposalBrowse
+     */
+    public function setChoiceNull($choiceNull)
+    {
+        $this->choiceNull = $choiceNull;
+
+        return $this;
+    }
+
+    /**
+     * Get choiceNull
+     *
+     * @return boolean
+     */
+    public function getChoiceNull()
+    {
+        return $this->choiceNull;
     }
 }

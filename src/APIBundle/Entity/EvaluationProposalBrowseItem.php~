@@ -36,6 +36,21 @@ class EvaluationProposalBrowseItem
      */
     private $item;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="algorithm", type="string", length=255)
+     */
+    private $algorithm;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="createDate", type="datetime", nullable=false)
+     */
+    private $createDate;
+
 
 
     /**

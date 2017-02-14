@@ -5,7 +5,7 @@ services:
 
     api.session:
         class: APIBundle\Service\session
-        arguments: [ "@doctrine.orm.entity_manager", "@buzz"]
+        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@api.log", "@entity.process"]
 
     api.proposal_browse:
         class: APIBundle\Service\proposalBrowse

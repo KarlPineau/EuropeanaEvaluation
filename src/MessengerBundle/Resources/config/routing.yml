@@ -29,6 +29,13 @@ messenger_session_index:
         authToken: "8u0QYy8OTLVKZK8"
         experiment_user_id: \d+
 
+messenger_session_close:
+    path:     /session/close/{authToken}/{experiment_session_id}
+    defaults: { _controller: MessengerBundle:Session:close }
+    requirements:
+        authToken: "8u0QYy8OTLVKZK8"
+        experiment_session_id: \d+
+
 # Proposal
 messenger_proposal_index:
     path:     /proposal/{authToken}/{experiment_session_id}
@@ -52,5 +59,21 @@ messenger_proposal_single_validation:
         authToken: "8u0QYy8OTLVKZK8"
         experiment_proposal_single_id: \d+
         value: \d+
+
+# ProposalBrowse
+messenger_proposal_browse_index:
+    path:     /proposal/browse/{authToken}/{experiment_proposal_browse_id}
+    defaults: { _controller: MessengerBundle:ProposalBrowse:index }
+    requirements:
+        authToken: "8u0QYy8OTLVKZK8"
+        experiment_proposal_browse_id: \d+
+
+messenger_proposal_browse_validation:
+    path:     /proposal/browse/validation/{authToken}/{experiment_proposal_browse_id}/{experiment_proposal_browse_i_id}
+    defaults: { _controller: MessengerBundle:ProposalBrowse:validation }
+    requirements:
+        authToken: "8u0QYy8OTLVKZK8"
+        experiment_proposal_browse_id: \d+
+        experiment_proposal_browse_i_id: \d+
 
 

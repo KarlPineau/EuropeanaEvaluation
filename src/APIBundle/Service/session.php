@@ -4,16 +4,21 @@ namespace APIBundle\Service;
 
 use APIBundle\Entity\EvaluationSession;
 use Doctrine\ORM\EntityManager;
+use EntityBundle\Service\process;
 
 class session
 {
     protected $em;
     protected $buzz;
+    protected $log;
+    protected $process;
 
-    public function __construct(EntityManager $EntityManager, $buzz)
+    public function __construct(EntityManager $EntityManager, $buzz, log $log, process $process)
     {
         $this->em = $EntityManager;
         $this->buzz = $buzz;
+        $this->log = $log;
+        $this->process = $process;
     }
 
     public function create($user)
@@ -29,10 +34,10 @@ class session
                 $session = $this->instance($user, true, null, "singleEvaluation");
                 break;
             case "browseEvaluation":
-                $session = $this->instance($user, false, null, "browseEvaluation");
+                $session = $this->instance($user, false, $this->setReferenceItem($user), "browseEvaluation");
                 break;
             case "browseEvaluationContextualized":
-                $session = $this->instance($user, true, null, "browseEvaluation");
+                $session = $this->instance($user, true, $this->setReferenceItem($user), "browseEvaluation");
                 break;
         }
 
@@ -47,34 +52,42 @@ class session
          *      It should also take into account the average of users, in order to have something balanced
          */
 
-        $sessions = $this->getByUser($user);
+        $this->log->log("------------------------------------------------------------------", 'api');
+        $this->log->log("-> api.session->setParameters() -- ".date('Y/m/d h:i:s a', time()), 'api');
 
-        $sessionsTypeSingleEvaluation = 0;
-        $sessionsTypeSingleEvaluationContextualized = 0;
-        $sessionsTypeBrowseEvaluation = 0;
-        $sessionsTypeBrowseEvaluationContextualized = 0;
 
-        foreach($sessions as $session) {
+        $array = [
+            "singleEvaluation" => 0,
+            "singleEvaluationContextualized" => 0,
+            "browseEvaluation" => 0,
+            "browseEvaluationContextualized" => 0,
+        ];
+
+        foreach($this->getByUser($user) as $session) {
             if($session->getType() == 'singleEvaluation' and $session->getContextualized() == false) {
-                $sessionsTypeSingleEvaluation++;
+                $array['singleEvaluation']++;
             } elseif($session->getType() == 'singleEvaluation' and $session->getContextualized() == true) {
-                $sessionsTypeSingleEvaluationContextualized++;
+                $array['singleEvaluationContextualized']++;
             } elseif($session->getType() == 'browseEvaluation' and $session->getContextualized() == false) {
-                $sessionsTypeBrowseEvaluation++;
+                $array['browseEvaluation']++;
             } elseif($session->getType() == 'browseEvaluation' and $session->getContextualized() == true) {
-                $sessionsTypeBrowseEvaluationContextualized++;
+                $array['browseEvaluationContextualized']++;
             }
         }
 
-        $array = [
-           "singleEvaluation" => $sessionsTypeSingleEvaluation,
-           "singleEvaluationContextualized" => $sessionsTypeSingleEvaluationContextualized,
-           "browseEvaluation" => $sessionsTypeBrowseEvaluation,
-           "browseEvaluationContextualized" => $sessionsTypeBrowseEvaluationContextualized,
-        ];
+        if($this->setReferenceItem($user) == null) {
+            $array['browseEvaluation'] += 1000;
+            $array['browseEvaluationContextualized'] += 1000;
+        }
 
-        //return array_keys($array, min($array));
-        return "singleEvaluation";
+        asort($array);
+        reset($array);
+
+        $this->log->log(json_encode($array), 'api');
+        $this->log->log("Returned type: ".key($array), 'api');
+
+        return key($array);
+        //return "singleEvaluation";
     }
 
     public function instance($user, $contextualized, $referenceItemId, $type)
@@ -85,6 +98,7 @@ class session
         $session->setReferenceItem($referenceItemId);
         $session->setType($type);
         $session->setEndDate(new \DateTime());
+        $session->setEndSession(false);
 
         $this->em->persist($session);
         $this->em->flush();
@@ -109,7 +123,44 @@ class session
         foreach($this->em->getRepository('APIBundle:EvaluationProposalSingle')->findBy(array('session' => $session)) as $proposal) {
             $array[] = ['proposal_type' => 'singleEvaluation', 'date' => $proposal->getCreateDate(), 'proposal' => $proposal];
         }
+        foreach($this->em->getRepository('APIBundle:EvaluationProposalBrowse')->findBy(array('session' => $session)) as $proposal) {
+            $array[] = ['proposal_type' => 'browseEvaluation', 'date' => $proposal->getCreateDate(), 'proposal' => $proposal];
+        }
 
         return $array;
+    }
+
+    public function setReferenceItem($user)
+    {
+        $referenceItems = $this->defineListReferenceItems();
+        $sessionsWithReferenceItem = array();
+        foreach($this->em->getRepository('APIBundle:EvaluationSession')->getReferenceItems($user) as $session) {
+            $sessionsWithReferenceItem[] = $session->getReferenceItem();
+        }
+
+        $selectedReferenceItems =
+            array_diff(
+                $referenceItems,
+                $sessionsWithReferenceItem);
+
+        if(count($selectedReferenceItems) > 0) {
+            shuffle($selectedReferenceItems);
+            return $selectedReferenceItems[0];
+        } else {
+            return null;
+        }
+
+    }
+
+    public function defineListReferenceItems()
+    {
+        $entitiesFetch = $this->em->getRepository('EntityBundle:EntityFetch')->findBy(array('processed' => true));
+
+        $referenceItems = array();
+        foreach($entitiesFetch as $entityFetch) {
+            $referenceItems[] = $this->process->getEuropeanaId($entityFetch->getUri());
+        }
+
+        return $referenceItems;
     }
 }

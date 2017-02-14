@@ -9,6 +9,33 @@
         <dt>End date</dt>
         <dd>{{ session.endDate|date('Y-m-d H:i:s') }}</dd>
     </dl>
+    <dl class="dl-horizontal">
+        <dt>Type</dt>
+        <dd>{{ session.type }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Context</dt>
+        <dd>{% if session.contextualized == true %}Yes{% else %}No{% endif %}</dd>
+    </dl>
+
+    {% if session.type == 'browseEvaluation' %}
+        {% set sessionReferenceItem = entity_graph.buildObject(session.referenceItem) %}
+        <div class="well">
+            <h3>Reference Item: {{ messenger_stringify.stringify(sessionReferenceItem['dcTitle'], ', ', false) }}</h3>
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <div class="thumbnail">
+                        <img src="{{ entity_graph.getThumbnail(sessionReferenceItem) }}" class="admin-img-entity" />
+                        <div class="caption">
+                            <h4>{{ messenger_stringify.stringify(sessionReferenceItem['dcTitle'], ', ', false) }}</h4>
+                            <p>{{ messenger_stringify.stringify(sessionReferenceItem['dcDescription'], ', ', false) }}</p>
+                            <p><a href="http://www.europeana.eu/portal/record{{ sessionReferenceItem['europeana_id'] }}.html" class="btn btn-default" target="_blank">View on Europeana</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     {% for proposalContainer in api_session.getProposals(session) %}
         <hr />

@@ -23,17 +23,17 @@ class process
 
     public function process($uri)
     {
-        $this->log->log("------------------------------------------------------------------");
-        $this->log->log("-> entity.process->process() -- ".date('Y/m/d h:i:s a', time()));
+        $this->log->log("------------------------------------------------------------------", 'entity');
+        $this->log->log("-> entity.process->process() -- ".date('Y/m/d h:i:s a', time()), 'entity');
 
         try {
-            $this->log->log("URI: ".$uri);
+            $this->log->log("URI: ".$uri, 'entity');
             if($this->checkIsset($this->getEuropeanaId($uri)) == false) {
-                $this->log->log("Isset Item ? NO");
+                $this->log->log("Isset Item ? NO", 'entity');
                 $record = $this->registerRecord($this->buildRecord($this->getRecord($this->getEuropeanaId($uri))));
                 return $record;
             } else {
-                $this->log->log("Isset Item ? YES");
+                $this->log->log("Isset Item ? YES", 'entity');
                 return null;
             }
         } catch (\Exception $e) {
@@ -44,11 +44,11 @@ class process
 
     public function registerRecord($record)
     {
-        $this->log->log("------------------------------------------------------------------");
-        $this->log->log("-> entity.process->registerRecord() -- ".date('Y/m/d h:i:s a', time()));
+        $this->log->log("------------------------------------------------------------------", 'entity');
+        $this->log->log("-> entity.process->registerRecord() -- ".date('Y/m/d h:i:s a', time()), 'entity');
 
         $europeana_id = $record['europeana_id'];
-        $this->log->log("Europeana_id: ".$europeana_id);
+        $this->log->log("Europeana_id: ".$europeana_id, 'entity');
         foreach($record as $property => $value) {
             $entityProperty = new EntityProperty();
             $entityProperty->setEuropeanaId($europeana_id);
@@ -60,7 +60,7 @@ class process
                 $entityProperty->setValue(null);
             }
 
-            $this->log->log("EntityProperty: >".$europeana_id.">".$property.">".json_encode($value));
+            $this->log->log("EntityProperty: >".$europeana_id.">".$property.">".json_encode($value), 'entity');
             $this->em->persist($entityProperty);
         }
         $this->em->flush();
@@ -72,8 +72,8 @@ class process
 
     public function buildRecord($record)
     {
-        $this->log->log("------------------------------------------------------------------");
-        $this->log->log("-> entity.process->buildRecord() -- ".date('Y/m/d h:i:s a', time()));
+        $this->log->log("------------------------------------------------------------------", 'entity');
+        $this->log->log("-> entity.process->buildRecord() -- ".date('Y/m/d h:i:s a', time()), 'entity');
 
         $object = array();
 
@@ -103,7 +103,7 @@ class process
         $object['edmType']          = $this->getProperty($this->getProxy($record, false), "edmType");
         $object['edmPreview']       = $this->getProperty($this->getEuropeanaAggregation($record), "edmPreview");
 
-        $this->log->log("RECORD: ".json_encode($object));
+        $this->log->log("RECORD: ".json_encode($object), 'entity');
         return $object;
     }
 
@@ -216,31 +216,31 @@ class process
 
     public function downloadThumbnail($record)
     {
-        $this->log->log("------------------------------------------------------------------");
-        $this->log->log("-> entity.process->downloadThumbnail() -- ".date('Y/m/d h:i:s a', time()));
-        $this->log->log("Record: ".$record['europeana_id']);
+        $this->log->log("------------------------------------------------------------------", 'entity');
+        $this->log->log("-> entity.process->downloadThumbnail() -- ".date('Y/m/d h:i:s a', time()), 'entity');
+        $this->log->log("Record: ".$record['europeana_id'], 'entity');
 
         set_time_limit(0);
         $thumbnail = $this->graph->getThumbnail($record);
-        $this->log->log("Set thumbnail as: ".$thumbnail);
+        $this->log->log("Set thumbnail as: ".$thumbnail, 'entity');
 
-        $this->log->log("Start File download");
+        $this->log->log("Start File download", 'entity');
         $id = uniqid();
         $ch = curl_init($thumbnail);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $data = curl_exec($ch);
         curl_close($ch);
-        $this->log->log("Start File Put Contents");
+        $this->log->log("Start File Put Contents", 'entity');
         @file_put_contents('../media/thumbnails/'.$id.'.'.pathinfo($thumbnail)['extension'], $data);
-        $this->log->log("End File download as: ".'/media/thumbnails/'.$id.'.'.pathinfo($thumbnail)['extension']);
+        $this->log->log("End File download as: ".'/media/thumbnails/'.$id.'.'.pathinfo($thumbnail)['extension'], 'entity');
 
-        $this->log->log("Start Register EntityProperty");
+        $this->log->log("Start Register EntityProperty", 'entity');
         $entityProperty = new EntityProperty();
         $entityProperty->setEuropeanaId($record['europeana_id']);
         $entityProperty->setProperty('thumbnail');
         $entityProperty->setValue($id.'.'.pathinfo($thumbnail)['extension']);
         $this->em->persist($entityProperty);
         $this->em->flush();
-        $this->log->log("End Register EntityProperty");
+        $this->log->log("End Register EntityProperty", 'entity');
     }
 }
