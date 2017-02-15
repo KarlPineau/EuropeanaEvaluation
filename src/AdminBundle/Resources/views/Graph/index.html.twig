@@ -30,14 +30,48 @@
             {% endfor %}
 
             {% for object in objects %}
-                <div class="well">
-                    <img src="{{ entity_graph.getThumbnail(object) }}" style="max-height: 100px;" />
-                    {% for property, value in object %}
-                    <dl class="dl-horizontal">
-                        <dt>{{ property }}</dt>
-                        <dd>{{ messenger_stringify.stringify(value, ', ', false) }}</dd>
-                    </dl>
-                {% endfor %}
+                <div class="well" id="object-{{ messenger_stringify.id(object['europeana_id']) }}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="thumbnail">
+                                <img src="{{ entity_graph.getThumbnail(object) }}" class="admin-img-entity" />
+                                <div class="caption">
+                                    <h4>{{ messenger_stringify.stringify(object['dcTitle'], ', ', false) }}</h4>
+                                    <p>{{ messenger_stringify.stringify(object['dcDescription'], ', ', false) }}</p>
+                                    <p>
+                                        <a href="http://www.europeana.eu/portal/record{{ object['europeana_id'] }}.html" class="btn btn-default" target="_blank">View on Europeana</a>
+                                        <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseObject-{{ messenger_stringify.id(object['europeana_id']) }}" aria-expanded="false" aria-controls="collapseObject-{{ messenger_stringify.id(object['europeana_id']) }}"><i class="fa fa-plus"></i></a>
+                                    </p>
+                                    <div class="collapse" id="collapseObject-{{ messenger_stringify.id(object['europeana_id']) }}">
+                                        {% for property, value in object %}
+                                        <dl class="dl-horizontal">
+                                            <dt>{{ property }}</dt>
+                                            <dd>{{ messenger_stringify.stringify(value, ', ', false) }}</dd>
+                                        </dl>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Relations</h4>
+                            {% for relation in entity_graph.getRelations(object['europeana_id']) %}
+                                {% set objectR = entity_graph.buildObject(relation['entity']) %}
+                                <div class="thumbnail">
+                                    <img src="{{ entity_graph.getThumbnail(objectR) }}" class="admin-img-entity-small" />
+                                    <div class="caption">
+                                        <div class="pull-right">
+                                            <span class="label label-primary" title="This relation has been generating by the following algorithm">{{ relation['algorithm'] }}</span>
+                                            <a class="btn btn-primary" href="#object-{{ messenger_stringify.id(objectR['europeana_id']) }}" ><i class="fa fa-eye"></i></a>
+                                        </div>
+                                        <h5>{{ messenger_stringify.stringify(objectR['dcTitle'], ', ', false) }}</h5>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-warning">No relation for this item.</div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             {% else %}
                 <div class="alert alert-warning">No graph</div>

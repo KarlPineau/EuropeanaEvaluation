@@ -27,10 +27,11 @@ class GraphController extends Controller
     public function removeAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('EntityBundle:EntityProperty')->findAll();
-
-        foreach($entities as $entity) {
+        foreach($em->getRepository('EntityBundle:EntityProperty')->findAll() as $entity) {
             $em->remove($entity);
+        }
+        foreach($em->getRepository('EntityBundle:EntityRelation')->findAll() as $relation) {
+            $em->remove($relation);
         }
         $em->flush();
 

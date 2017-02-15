@@ -80,4 +80,9 @@ class stringify
             $this->stringify($variable, $delimiter, $wrapBool);
         }
     }
+
+    public function id($id)
+    {
+        return str_replace('/', '', $id);
+    }
 }

@@ -51,7 +51,7 @@ class ProposalBrowseController extends Controller
 
             $elements[] = [
                 "title" => "No interesting choices",
-                "image_url" => "https://upload.wikimedia.org/wikipedia/commons/0/06/Face-sad.svg",
+                "image_url" => "http://europeana-evaluation.karl-pineau.fr/web/images/sad-icon.png",
                 "subtitle" => "Click here if you can't find any interesting item.",
                 "buttons" => [
                     [

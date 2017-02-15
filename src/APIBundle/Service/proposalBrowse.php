@@ -24,6 +24,8 @@ class proposalBrowse
                         ? $this->getLastProposalBySession($session)->getChoicedItem()->getItem()
                         : $session->getReferenceItem();
 
+        $forceBreak = ($this->getLastProposalBySession($session) != null) ? $this->getLastProposalBySession($session)->getChoiceNull() : false ;
+
         $proposal = new EvaluationProposalBrowse();
         $proposal->setSession($session);
         $proposal->setReferenceItem($referenceItem);
@@ -32,7 +34,7 @@ class proposalBrowse
         $this->em->persist($proposal);
         $proposalBrowseItems = $this->proposalBrowseItem->create($proposal, $referenceItem, $this->getReferenceItems($session));
 
-        if($proposalBrowseItems != null OR $referenceItem != null) {
+        if($proposalBrowseItems != null AND $referenceItem != null AND $forceBreak == false) {
             $this->em->flush();
             return $proposal;
         } else {

@@ -76,7 +76,10 @@ class proposalSingle
         $oldEntityRelations = [];
         foreach ($this->session->getByUser($user) as $session) {
             foreach($this->getBySession($session) as $proposalSingleOccurrence) {
-                $oldEntityRelations[] = $this->em->getRepository('EntityBundle:EntityRelation')->findOneBy(array('entity1' => $proposalSingleOccurrence->getReferenceItem(), 'entity2' => $proposalSingleOccurrence->getSuggestedItem()))->getId();
+                $res = $this->em->getRepository('EntityBundle:EntityRelation')->findOneBy(array('entity1' => $proposalSingleOccurrence->getReferenceItem(), 'entity2' => $proposalSingleOccurrence->getSuggestedItem()));
+                if($res != null) {
+                    $oldEntityRelations[] = $res->getId();
+                }
             }
         }
 

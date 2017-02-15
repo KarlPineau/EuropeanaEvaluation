@@ -48,4 +48,14 @@ class graph
             return 'https://commons.wikimedia.org/wiki/File:No_image_available.svg';
         }
     }
+
+    public function getRelations($id)
+    {
+        $ids = [];
+        foreach($this->em->getRepository('EntityBundle:EntityRelation')->findBy(array('entity1' => $id)) as $relation) {
+            $ids[] = ['entity' => $relation->getEntity2(), 'algorithm' => $relation->getAlgorithm()];
+        }
+
+        return $ids;
+    }
 }

@@ -56,28 +56,32 @@ class similarItems
         if($sub != null) {
             $this->log->log("-> Europeana_id: ".$sub, 'entity');
 
-            if ($this->process->checkIsset($sub) == false) {
-                $this->log->log("-> Isset item ? NO", 'entity');
-                $subRecord = (object) $this->process->registerRecord($this->process->buildRecord($this->process->getRecord($sub)));
+            if($this->em->getRepository('EntityBundle:EntityRelation')->findOneBy(array('entity1' => $record->europeana_id, 'entity2' => $sub)) == null) {
+                if ($this->process->checkIsset($sub) == false) {
+                    $this->log->log("-> Isset item ? NO", 'entity');
+                    $subRecord = (object)$this->process->registerRecord($this->process->buildRecord($this->process->getRecord($sub)));
 
-                $relation = new EntityRelation();
-                $relation->setEntity1($record->europeana_id);
-                $relation->setEntity2($sub);
-                $relation->setAlgorithm($algorithm);
-                $this->em->persist($relation);
-                $this->em->flush();
+                    $relation = new EntityRelation();
+                    $relation->setEntity1($record->europeana_id);
+                    $relation->setEntity2($sub);
+                    $relation->setAlgorithm($algorithm);
+                    $this->em->persist($relation);
+                    $this->em->flush();
 
-                if ($deepLevel > 1) {
-                    $this->computeSimilarity($subRecord, $deepLevel - 1);
+                    if ($deepLevel > 1) {
+                        $this->computeSimilarity($subRecord, $deepLevel - 1);
+                    }
+                } else {
+                    $this->log->log("-> Isset item ? YES", 'entity');
+                    $relation = new EntityRelation();
+                    $relation->setEntity1($record->europeana_id);
+                    $relation->setEntity2($sub);
+                    $relation->setAlgorithm($algorithm);
+                    $this->em->persist($relation);
+                    $this->em->flush();
                 }
             } else {
-                $this->log->log("-> Isset item ? YES", 'entity');
-                $relation = new EntityRelation();
-                $relation->setEntity1($record->europeana_id);
-                $relation->setEntity2($sub);
-                $relation->setAlgorithm($algorithm);
-                $this->em->persist($relation);
-                $this->em->flush();
+                $this->log->log("!-> Relation already existing", 'entity');
             }
         } else {
             $this->log->log("!-> Europeana_id: NULL", 'entity');
