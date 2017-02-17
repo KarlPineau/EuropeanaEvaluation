@@ -16,8 +16,6 @@ class ProposalSingleController extends Controller
             $referenceItem = (object) $this->get('entity.graph')->buildObject($proposalSingle->getReferenceItem());
             $suggestedItem = (object) $this->get('entity.graph')->buildObject($proposalSingle->getSuggestedItem());
 
-            $contextualizedInfo = ''; if($proposalSingle->getSession()->getContextualized() == true) {$contextualizedInfo .= 'CONTEXTUALIZED -- ';}
-
             $messages = [
                 "set_attributes" =>
                     [
@@ -36,7 +34,7 @@ class ProposalSingleController extends Controller
                                     [
                                         "title" => $this->get('messenger.stringify')->stringify($referenceItem->dcTitle, ', ', false),
                                         "image_url" => $this->get('entity.graph')->getThumbnail($referenceItem),
-                                        "subtitle" => $contextualizedInfo.$this->get('messenger.stringify')->stringify($referenceItem->dcDescription, ', ', false),
+                                        "subtitle" => $this->get('messenger.stringify')->stringify($referenceItem->dcDescription, ', ', false),
                                         "buttons" => [
                                             [
                                                 "type" => "web_url",
@@ -48,7 +46,7 @@ class ProposalSingleController extends Controller
                                     [
                                         "title" => $this->get('messenger.stringify')->stringify($suggestedItem->dcTitle, ', ', false),
                                         "image_url" => $this->get('entity.graph')->getThumbnail($suggestedItem),
-                                        "subtitle" => $contextualizedInfo.$this->get('messenger.stringify')->stringify($suggestedItem->dcDescription, ', ', false),
+                                        "subtitle" => $this->get('messenger.stringify')->stringify($suggestedItem->dcDescription, ', ', false),
                                         "buttons" => [
                                             [
                                                 "type" => "web_url",
@@ -168,6 +166,11 @@ class ProposalSingleController extends Controller
                     ]
                 ]
             ];
+
+            if($proposalSingle->getSession()->getContextualized() == true) {
+                $context = 'The following items shared these properties: '.implode(', ', $this->get('api.context')->getForProposalSingle($proposalSingle));
+                array_unshift($messages['messages'], ["text" => $context]);
+            }
 
 
             $proposalSingle->getSession()->setEndDate(new \DateTime());

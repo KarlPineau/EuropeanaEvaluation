@@ -61,7 +61,7 @@ class ProposalBrowseController extends Controller
                                 "evaluation_proposal_id" => $proposalBrowse->getId(),
                                 "evaluation_proposal_value" => 0,
                             ],
-                        "title" => "Select this item",
+                        "title" => "Not interested",
                         "type" => "show_block",
                         "block_name" => "3-Proposal-Validation"
                     ]

@@ -23,3 +23,7 @@ services:
         class: APIBundle\Service\log
         arguments: [ "@doctrine.orm.entity_manager"]
 
+    api.context:
+        class: APIBundle\Service\context
+        arguments: [ "@doctrine.orm.entity_manager", "@buzz", "@api.log", "@entity.graph", "@api.proposal_single", "@api.proposal_browse", "@api.proposal_browse_item"]
+

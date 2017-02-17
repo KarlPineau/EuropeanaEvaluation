@@ -234,6 +234,23 @@ class process
         @file_put_contents('../media/thumbnails/'.$id.'.'.pathinfo($thumbnail)['extension'], $data);
         $this->log->log("End File download as: ".'/media/thumbnails/'.$id.'.'.pathinfo($thumbnail)['extension'], 'entity');
 
+
+        $this->log->log("Start File download", 'entity');
+        $id = uniqid();
+        $ch = curl_init ($thumbnail);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
+        $raw=curl_exec($ch);
+        curl_close ($ch);
+        $this->log->log("Start File Put Contents", 'entity');
+        if(file_exists('./web/media/thumbnails/')){
+            unlink('./web/media/thumbnails/');
+        }
+        $fp = fopen('./web/media/thumbnails/','x');
+        fwrite($fp, $raw);
+        fclose($fp);
+
         $this->log->log("Start Register EntityProperty", 'entity');
         $entityProperty = new EntityProperty();
         $entityProperty->setEuropeanaId($record['europeana_id']);

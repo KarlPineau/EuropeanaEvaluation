@@ -38,14 +38,15 @@ class graph
     {
         if(gettype($record) == 'object') {$record = (array) $record;}
 
-        if(array_key_exists('edmIsShownBy', $record) AND $record['edmIsShownBy'] != null AND $this->url_exists($this->stringify->stringify($record['edmIsShownBy'], ' OR ', false)) == true) {
+       /*if(array_key_exists('edmIsShownBy', $record) AND $record['edmIsShownBy'] != null AND $this->url_exists($this->stringify->stringify($record['edmIsShownBy'], ' OR ', false)) == true) {
             return $record['edmIsShownBy'];
-        } elseif(array_key_exists('edmObject', $record) AND $record['edmObject'] != null AND $this->url_exists($this->stringify->stringify($record['edmObject'], ' OR ', false)) == true) {
+        } else*/
+        if(array_key_exists('edmObject', $record) AND $record['edmObject'] != null AND $this->url_exists($this->stringify->stringify($record['edmObject'], ' OR ', false)) == true) {
             return $record['edmObject'];
         } elseif(array_key_exists('edmPreview', $record) AND $record['edmPreview'] != null AND $this->url_exists($this->stringify->stringify($record['edmPreview'], ' OR ', false)) == true) {
             return $record['edmPreview'];
         } else {
-            return 'https://commons.wikimedia.org/wiki/File:No_image_available.svg';
+            return 'http://europeana-evaluation.karl-pineau.fr/web/images/no_image_available.png';
         }
     }
 

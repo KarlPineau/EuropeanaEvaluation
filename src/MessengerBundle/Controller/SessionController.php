@@ -14,7 +14,7 @@ class SessionController extends Controller
             //if($user == null) {return $this->redirectToRoute('messenger_system_restart');}
 
             $lastSession = $this->get('api.user')->getLastSession($user);
-            $session = ($lastSession == null OR $lastSession->getEndSession() == true OR date_diff(new \DateTime(), $lastSession->getCreateDate())->format('%h') > 0 OR (count($this->get('api.session')->getProposals($lastSession)) > 5) AND $lastSession->getType() == 'singleEvaluation') ? $this->get('api.session')->create($user) : $lastSession;
+            $session = ($lastSession == null OR $lastSession->getEndSession() == true OR date_diff(new \DateTime(), $lastSession->getCreateDate())->format('%h') > 0 OR (count($this->get('api.session')->getProposals($lastSession)) >= 5) AND $lastSession->getType() == 'singleEvaluation') ? $this->get('api.session')->create($user) : $lastSession;
 
             $messages = [
                 "set_attributes" =>

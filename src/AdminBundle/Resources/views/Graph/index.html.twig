@@ -60,11 +60,14 @@
                                 <div class="thumbnail">
                                     <img src="{{ entity_graph.getThumbnail(objectR) }}" class="admin-img-entity-small" />
                                     <div class="caption">
-                                        <div class="pull-right">
+                                        <h5>{{ messenger_stringify.stringify(objectR['dcTitle'], ', ', false) }}</h5>
+                                        <div class="">
+                                            {% for sharing in api_context.getForAdmin(object['europeana_id'], objectR['europeana_id']) %}
+                                            <span class="label label-default" title="These items share the following properties">{{ sharing }}</span>
+                                            {% endfor %}
                                             <span class="label label-primary" title="This relation has been generating by the following algorithm">{{ relation['algorithm'] }}</span>
                                             <a class="btn btn-primary" href="#object-{{ messenger_stringify.id(objectR['europeana_id']) }}" ><i class="fa fa-eye"></i></a>
                                         </div>
-                                        <h5>{{ messenger_stringify.stringify(objectR['dcTitle'], ', ', false) }}</h5>
                                     </div>
                                 </div>
                                 {% else %}
