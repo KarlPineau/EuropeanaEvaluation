@@ -111,56 +111,6 @@ class ProposalSingleController extends Controller
                                     ],
                                 "title" => "5",
                                 "block_names" => ["3-Proposal-Validation"]
-                            ],
-                            [
-                                "set_attributes" =>
-                                    [
-                                        "evaluation_validation_type" => "single",
-                                        "evaluation_proposal_id" => $proposalSingle->getId(),
-                                        "evaluation_proposal_value" => "6",
-                                    ],
-                                "title" => "6",
-                                "block_names" => ["3-Proposal-Validation"]
-                            ],
-                            [
-                                "set_attributes" =>
-                                    [
-                                        "evaluation_validation_type" => "single",
-                                        "evaluation_proposal_id" => $proposalSingle->getId(),
-                                        "evaluation_proposal_value" => "7",
-                                    ],
-                                "title" => "7",
-                                "block_names" => ["3-Proposal-Validation"]
-                            ],
-                            [
-                                "set_attributes" =>
-                                    [
-                                        "evaluation_validation_type" => "single",
-                                        "evaluation_proposal_id" => $proposalSingle->getId(),
-                                        "evaluation_proposal_value" => "8",
-                                    ],
-                                "title" => "8",
-                                "block_names" => ["3-Proposal-Validation"]
-                            ],
-                            [
-                                "set_attributes" =>
-                                    [
-                                        "evaluation_validation_type" => "single",
-                                        "evaluation_proposal_id" => $proposalSingle->getId(),
-                                        "evaluation_proposal_value" => "9",
-                                    ],
-                                "title" => "9",
-                                "block_names" => ["3-Proposal-Validation"]
-                            ],
-                            [
-                                "set_attributes" =>
-                                    [
-                                        "evaluation_validation_type" => "single",
-                                        "evaluation_proposal_id" => $proposalSingle->getId(),
-                                        "evaluation_proposal_value" => "10",
-                                    ],
-                                "title" => "10",
-                                "block_names" => ["3-Proposal-Validation"]
                             ]
                         ]
                     ]

@@ -89,6 +89,7 @@ class process
         $object['dcDescription']    = $this->getProperty($this->getProxy($record, false), "dcDescription");
         $object['dcContributor']    = $this->getProperty($this->getProxy($record, false), "dcContributor");
         $object['dcCreator']        = $this->getProperty($this->getProxy($record, false), "dcCreator");
+        $object['dcDate']           = $this->getProperty($this->getProxy($record, false), "dcDate");
         $object['dcFormat']         = $this->getProperty($this->getProxy($record, false), "dcFormat");
         $object['dcLanguage']       = $this->getProperty($this->getProxy($record, false), "dcLanguage");
         $object['dcPublisher']      = $this->getProperty($this->getProxy($record, false), "dcPublisher");

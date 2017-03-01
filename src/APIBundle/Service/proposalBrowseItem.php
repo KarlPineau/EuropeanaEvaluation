@@ -53,7 +53,7 @@ class proposalBrowseItem
 
     public function getByProposalBrowse($proposalBrowse)
     {
-        return $this->em->getRepository('APIBundle:EvaluationProposalBrowseItem')->findBy(array('proposal' => $proposalBrowse));
+        return $this->em->getRepository('APIBundle:EvaluationProposalBrowseItem')->findBy(array('proposal' => $proposalBrowse), array('orderValue' => 'ASC'));
     }
 
     public function remove($proposalBrowseItem)

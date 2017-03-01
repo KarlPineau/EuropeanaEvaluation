@@ -1,41 +1,58 @@
 # Home
 admin_home_index:
-    path:     /
+    path:     /{authtoken}
     defaults: { _controller: AdminBundle:Home:index }
+    requirements:
+        authtoken: "7jCqTsRaGlUNwpe|JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"
 
 # Entity
 admin_entity_insert:
-    path:     /entity/fetch/insert
+    path:     /{authtoken}/entity/fetch/insert
     defaults: { _controller: AdminBundle:Entity:insert }
+    requirements:
+        authtoken: "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"
 
 admin_entity_viewWaitingFetch:
-    path:     /entity/fetch/waiting
+    path:     /{authtoken}/entity/fetch/waiting
     defaults: { _controller: AdminBundle:Entity:viewWaitingFetch }
+    requirements:
+        authtoken: "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"
 
 admin_entity_processFetch:
-    path:     /entity/fetch/process
+    path:     /{authtoken}/entity/fetch/process
     defaults: { _controller: AdminBundle:Entity:processFetch }
+    requirements:
+        authtoken: "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"
 
 admin_entity_resetFetch:
-    path:     /entity/fetch/reset
+    path:     /{authtoken}/entity/fetch/reset
     defaults: { _controller: AdminBundle:Entity:resetFetch }
+    requirements:
+        authtoken: "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"
 
 # Graph
 admin_graph_index:
-    path:     /graph
+    path:     /{authtoken}/graph
     defaults: { _controller: AdminBundle:Graph:index }
+    requirements:
+        authtoken: "7jCqTsRaGlUNwpe|JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"
 
 admin_graph_remove:
-    path:     /graph/remove
+    path:     /{authtoken}/graph/remove
     defaults: { _controller: AdminBundle:Graph:remove }
+    requirements:
+        authtoken: "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"
 
 # EvaluationUser
 admin_evaluation_user_index:
-    path:     /users
+    path:     /{authtoken}/users
     defaults: { _controller: AdminBundle:EvaluationUser:index }
+    requirements:
+        authtoken: "7jCqTsRaGlUNwpe|JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"
 
 admin_evaluation_user_view:
-    path:     /user/{user_id}
+    path:     /{authtoken}/user/{user_id}
     defaults: { _controller: AdminBundle:EvaluationUser:view }
     requirements:
         user_id: \d+
+        authtoken: "7jCqTsRaGlUNwpe|JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"

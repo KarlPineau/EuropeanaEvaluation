@@ -3,6 +3,8 @@
 namespace EntityBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * EntityRelation
@@ -42,6 +44,14 @@ class EntityRelation
      */
     private $algorithm;
 
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="createDate", type="datetime", nullable=false)
+     */
+    private $createDate;
+
 
 
     /**
@@ -53,5 +63,76 @@ class EntityRelation
     {
         return $this->id;
     }
-}
 
+    /**
+     * Set entity1
+     *
+     * @param string $entity1
+     *
+     * @return EntityRelation
+     */
+    public function setEntity1($entity1)
+    {
+        $this->entity1 = $entity1;
+
+        return $this;
+    }
+
+    /**
+     * Get entity1
+     *
+     * @return string
+     */
+    public function getEntity1()
+    {
+        return $this->entity1;
+    }
+
+    /**
+     * Set entity2
+     *
+     * @param string $entity2
+     *
+     * @return EntityRelation
+     */
+    public function setEntity2($entity2)
+    {
+        $this->entity2 = $entity2;
+
+        return $this;
+    }
+
+    /**
+     * Get entity2
+     *
+     * @return string
+     */
+    public function getEntity2()
+    {
+        return $this->entity2;
+    }
+
+    /**
+     * Set algorithm
+     *
+     * @param string $algorithm
+     *
+     * @return EntityRelation
+     */
+    public function setAlgorithm($algorithm)
+    {
+        $this->algorithm = $algorithm;
+
+        return $this;
+    }
+
+    /**
+     * Get algorithm
+     *
+     * @return string
+     */
+    public function getAlgorithm()
+    {
+        return $this->algorithm;
+    }
+}

@@ -18,9 +18,9 @@ class UserController extends Controller
                         [
                             "experiment_user_id" => $user->getId(),
                         ],
-                    "messages" => [
+                    /*"messages" => [
                         ["text" => "Starting user " . $user->getId()],
-                    ]
+                    ]*/
                 ];
 
                 $response = new Response(json_encode($messages));

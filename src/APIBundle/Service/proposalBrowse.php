@@ -34,6 +34,11 @@ class proposalBrowse
         $this->em->persist($proposal);
         $proposalBrowseItems = $this->proposalBrowseItem->create($proposal, $referenceItem, $this->getReferenceItems($session));
 
+        shuffle($proposalBrowseItems);
+        foreach($proposalBrowseItems as $key => $proposalBrowseItem) {
+            $proposalBrowseItem->setOrderValue($key+1);
+        }
+
         if($proposalBrowseItems != null AND $referenceItem != null AND $forceBreak == false) {
             $this->em->flush();
             return $proposal;

@@ -12,7 +12,7 @@
 
 {% block breadcrumb %}
     {{ parent() }}
-    <li class="active">EvaluationUsers</li>
+    <li><a href="{{ path('admin_evaluation_user_index', {'authtoken': authtoken}) }}">EvaluationUsers</a></li>
 {% endblock %}
 
 {% block h1_extend %}
@@ -59,10 +59,12 @@
                             <dt>Creation Date</dt>
                             <dd>{{ user.createDate|date('Y-m-d H:i:s') }}</dd>
                         </dl>
+                        {% if authtoken == "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii" %}
                         <dl class="dl-horizontal">
                             <dt>Remove User</dt>
-                            <dd><a href="{{ path('api_user_remove', {'user_id': user.id}) }}" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i> (no way back)</a></dd>
+                            <dd><a href="{{ path('api_user_remove', {'user_id': user.id, 'authtoken': authtoken}) }}" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i> (no way back)</a></dd>
                         </dl>
+                        {% endif %}
                     </div>
                 </div>
             </div>

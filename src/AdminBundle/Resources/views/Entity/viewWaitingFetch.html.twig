@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block h1_extend %}
-    <a class="btn btn-primary" href="{{ path('admin_entity_processFetch') }}">Process Fetch</a>
+    <a class="btn btn-primary" href="{{ path('admin_entity_processFetch', {'authtoken': authtoken}) }}">Process Fetch</a>
 {% endblock %}
     
 {% block content %}

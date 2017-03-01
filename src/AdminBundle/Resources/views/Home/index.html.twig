@@ -31,18 +31,20 @@
                 <h2>Admin Links</h2>
 
                 <ul>
-                    <li><a href="{{ path('admin_evaluation_user_index') }}">Users list</a></li>
+                    <li><a href="{{ path('admin_evaluation_user_index', {'authtoken': authtoken}) }}">List of users</a></li>
                 </ul>
                 <hr />
                 <ul>
-                    <li><a href="{{ path('admin_entity_insert') }}">Insert Fetch</a></li>
-                    <li><a href="{{ path('admin_entity_viewWaitingFetch') }}">Waiting Fetch</a></li>
-                    <li><a href="{{ path('admin_entity_resetFetch') }}">Reset Fetch</a></li>
+                    <li><a href="{{ path('admin_graph_index', {'authtoken': authtoken}) }}">View recommendations</a></li>
                 </ul>
+                {% if authtoken == "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii" %}
                 <hr />
                 <ul>
-                    <li><a href="{{ path('admin_graph_index') }}">View Graph</a></li>
+                    <li><a href="{{ path('admin_entity_insert', {'authtoken': authtoken}) }}">Insert Fetch</a></li>
+                    <li><a href="{{ path('admin_entity_viewWaitingFetch', {'authtoken': authtoken}) }}">Waiting Fetch</a></li>
+                    <li><a href="{{ path('admin_entity_resetFetch', {'authtoken': authtoken}) }}">Reset Fetch <span class="text-warning">DO NOT USE</span></a></li>
                 </ul>
+                {% endif %}
             </div>
         </section>
     </div>

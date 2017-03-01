@@ -141,28 +141,4 @@ class EntityImage
     {
         return $this->updatedAt;
     }
-
-    /**
-     * Set createDate
-     *
-     * @param \DateTime $createDate
-     *
-     * @return EntityImage
-     */
-    public function setCreateDate($createDate)
-    {
-        $this->createDate = $createDate;
-
-        return $this;
-    }
-
-    /**
-     * Get createDate
-     *
-     * @return \DateTime
-     */
-    public function getCreateDate()
-    {
-        return $this->createDate;
-    }
 }

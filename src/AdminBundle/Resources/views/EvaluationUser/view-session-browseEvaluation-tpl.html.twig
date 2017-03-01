@@ -1,8 +1,7 @@
 <div class="well">
     {% set proposalBrowseItems = api_proposal_browse_item.getByProposalBrowse(proposalContainer['proposal']) %}
     <div class="row">
-
-        {% if proposalBrowseItems|length == 0 %}
+        {% if proposalBrowseItems|length > 0 %}
             {% for proposalBrowseItem in proposalBrowseItems %}
             <div class="col-sm-4">
                 {% set suggestedItem = entity_graph.buildObject(proposalBrowseItem.item) %}
@@ -11,18 +10,23 @@
                     <div class="caption">
                         <h4>{{ messenger_stringify.stringify(suggestedItem['dcTitle'], ', ', false) }}</h4>
                         <p>{{ messenger_stringify.stringify(suggestedItem['dcDescription'], ', ', false) }}</p>
-                        <p><a href="http://www.europeana.eu/portal/record{{ suggestedItem['europeana_id'] }}.html" class="btn btn-default" target="_blank">View on Europeana</a> <span class="label label-primary">{{ proposalBrowseItem.algorithm }}</span></p>
+                        <p><span class="label label-primary">{{ proposalBrowseItem.algorithm }}</span></p>
+                        <p>
+                            <a href="http://www.europeana.eu/portal/record{{ suggestedItem['europeana_id'] }}.html" class="btn btn-default" target="_blank">View on Europeana</a>
+                        </p>
                     </div>
+                    {% if proposalContainer['proposal'].choicedItem == proposalBrowseItem %}<div class="text-center"><div class="alert alert-success" title="This item has been clicked by the user">Clicked</div></div>{% endif %}
                 </div>
             </div>
             {% endfor %}
             <div class="col-sm-4">
                 <div class="thumbnail">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/Face-sad.svg" class="admin-img-entity" />
+                    <div class="text-center"><i class="fa fa-frown-o fa-5x"></i></div>
                     <div class="caption">
                         <h4>No interesting choices</h4>
                         <p>Click here if you can't find any interesting item.</p>
                     </div>
+                    {% if proposalContainer['proposal'].choiceNull == true and proposalContainer['proposal'].choicedItem == null %}<div class="text-center"><div class="alert alert-success" title="This item has been clicked by the user">Clicked</div></div>{% endif %}
                 </div>
             </div>
 

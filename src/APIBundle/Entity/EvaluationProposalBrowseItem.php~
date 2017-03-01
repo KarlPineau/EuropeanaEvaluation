@@ -42,6 +42,12 @@ class EvaluationProposalBrowseItem
      * @ORM\Column(name="algorithm", type="string", length=255)
      */
     private $algorithm;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="order", type="integer", nullable=true)
+     */
+    private $order;
 
     /**
      * @var \DateTime
@@ -109,5 +115,53 @@ class EvaluationProposalBrowseItem
     public function getProposal()
     {
         return $this->proposal;
+    }
+
+    /**
+     * Set algorithm
+     *
+     * @param string $algorithm
+     *
+     * @return EvaluationProposalBrowseItem
+     */
+    public function setAlgorithm($algorithm)
+    {
+        $this->algorithm = $algorithm;
+
+        return $this;
+    }
+
+    /**
+     * Get algorithm
+     *
+     * @return string
+     */
+    public function getAlgorithm()
+    {
+        return $this->algorithm;
+    }
+
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     *
+     * @return EvaluationProposalBrowseItem
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
     }
 }

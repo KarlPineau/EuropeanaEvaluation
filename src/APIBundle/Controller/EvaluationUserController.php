@@ -26,6 +26,6 @@ class EvaluationUserController extends Controller
         $this->getDoctrine()->getManager()->flush();
 
         $this->get('session')->getFlashBag()->add('notice', 'User '.$user_id.' has been correctly removing.' );
-        return $this->redirectToRoute('admin_home_index');
+        return $this->redirectToRoute('admin_evaluation_user_index');
     }
 }

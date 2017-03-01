@@ -59,4 +59,17 @@ class graph
 
         return $ids;
     }
+
+    public function getLevel($id, $level=null)
+    {
+        $level = ($level == null) ? 0 : $level;
+
+        $relation = $this->em->getRepository('EntityBundle:EntityRelation')->findOneBy(array('entity2' => $id), array('createDate', 'ASC'));
+        if($relation == null) {
+            return $level;
+        } else {
+            $level++;
+            return $this->getLevel($relation->getEntity1(), $level);
+        }
+    }
 }

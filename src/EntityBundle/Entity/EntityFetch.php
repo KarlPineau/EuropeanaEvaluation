@@ -3,6 +3,8 @@
 namespace EntityBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * EntityFetch
@@ -34,6 +36,14 @@ class EntityFetch
      * @ORM\Column(name="processed", type="boolean", nullable=true, options="default: false;")
      */
     private $processed;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="createDate", type="datetime", nullable=false)
+     */
+    private $createDate;
 
 
     /**
@@ -92,5 +102,29 @@ class EntityFetch
     public function getProcessed()
     {
         return $this->processed;
+    }
+
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     *
+     * @return EntityFetch
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
     }
 }

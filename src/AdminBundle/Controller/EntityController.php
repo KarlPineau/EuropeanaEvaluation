@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EntityController extends Controller
 {
-    public function insertAction(Request $request)
+    public function insertAction($authtoken, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -26,15 +26,16 @@ class EntityController extends Controller
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('notice', $count.' entities have been inserting properly.' );
-            return $this->redirect($this->generateUrl('admin_home_index'));
+            return $this->redirect($this->generateUrl('admin_home_index', array('authtoken' => $authtoken,)));
         }
 
         return $this->render('AdminBundle:Entity:insert.html.twig', array(
+            'authtoken' => $authtoken,
             'form' => $form->createView(),
         ));
     }
 
-    public function viewWaitingFetchAction(Request $request)
+    public function viewWaitingFetchAction($authtoken, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $entitiesQuery = $em->getRepository('EntityBundle:EntityFetch')->findByProcessed(false);
@@ -46,11 +47,12 @@ class EntityController extends Controller
         );
 
         return $this->render('AdminBundle:Entity:viewWaitingFetch.html.twig', array(
-            'entities' => $entities
+            'entities' => $entities,
+            'authtoken' => $authtoken,
         ));
     }
 
-    public function processFetchAction()
+    public function processFetchAction($authtoken)
     {
         set_time_limit(0);
         $em = $this->getDoctrine()->getManager();
@@ -72,10 +74,10 @@ class EntityController extends Controller
         $em->flush();
 
         $this->get('session')->getFlashBag()->add('notice', $countTrue.' entities have been processing properly. '.$countFalse.' entities haven\'t been processing.');
-        return $this->redirect($this->generateUrl('admin_home_index'));
+        return $this->redirect($this->generateUrl('admin_home_index', array('authtoken' => $authtoken,)));
     }
 
-    public function resetFetchAction()
+    public function resetFetchAction($authtoken)
     {
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('EntityBundle:EntityFetch')->findByProcessed(true);
@@ -86,6 +88,6 @@ class EntityController extends Controller
         $em->flush();
 
         $this->get('session')->getFlashBag()->add('notice', 'The fetch list has been resetting properly.' );
-        return $this->redirect($this->generateUrl('admin_home_index'));
+        return $this->redirect($this->generateUrl('admin_home_index', array('authtoken' => $authtoken,)));
     }
 }

@@ -9,12 +9,12 @@ class SessionController extends Controller
 {
     public function indexAction($experiment_user_id)
     {
-        //try {
+        try {
             $user = $this->get('api.user')->get($experiment_user_id);
-            //if($user == null) {return $this->redirectToRoute('messenger_system_restart');}
+            if($user == null) {return $this->redirectToRoute('messenger_system_restart');}
 
             $lastSession = $this->get('api.user')->getLastSession($user);
-            $session = ($lastSession == null OR $lastSession->getEndSession() == true OR date_diff(new \DateTime(), $lastSession->getCreateDate())->format('%h') > 0 OR (count($this->get('api.session')->getProposals($lastSession)) >= 5) AND $lastSession->getType() == 'singleEvaluation') ? $this->get('api.session')->create($user) : $lastSession;
+            $session = ($lastSession == null OR $lastSession->getEndSession() == true OR date_diff(new \DateTime(), $lastSession->getCreateDate())->format('%h') > 0 OR (count($this->get('api.session')->getProposals($lastSession)) >= 5 AND $lastSession->getType() == 'singleEvaluation')) ? $this->get('api.session')->create($user) : $lastSession;
 
             $messages = [
                 "set_attributes" =>
@@ -37,14 +37,14 @@ class SessionController extends Controller
             $response = new Response(json_encode($messages));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
-        /*} catch(\Exception $e) {
+        } catch(\Exception $e) {
             return $this->redirectToRoute('messenger_system_restart');
-        }*/
+        }
     }
 
     public function closeAction($experiment_session_id)
     {
-        //try {
+        try {
             $previousSession = $this->get('api.session')->get($experiment_session_id);
             if($previousSession == null) {return $this->redirectToRoute('messenger_system_restart');}
 
@@ -59,7 +59,7 @@ class SessionController extends Controller
                     ],
                 "messages" => [
                     [
-                        "text" => "Thanks for your answer :)",
+                        "text" => "Let's continue!",
                         "quick_replies" => [
                             [
                                 "type" => "show_block",
@@ -75,8 +75,8 @@ class SessionController extends Controller
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 
-        /*} catch(\Exception $e) {
+        } catch(\Exception $e) {
             return $this->redirectToRoute('messenger_system_restart');
-        }*/
+        }
     }
 }

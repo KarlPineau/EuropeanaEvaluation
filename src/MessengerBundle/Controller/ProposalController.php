@@ -8,9 +8,9 @@ class ProposalController extends Controller
 {
     public function indexAction($experiment_session_id)
     {
-        //try {
+        try {
             $session = $this->get('api.session')->get($experiment_session_id);
-        //    if($session == null) {return $this->redirectToRoute('messenger_system_restart');}
+            if($session == null) {return $this->redirectToRoute('messenger_system_restart');}
 
             $session->setEndDate(new \DateTime());
             $this->getDoctrine()->getManager()->flush();
@@ -29,8 +29,8 @@ class ProposalController extends Controller
                 return $this->redirectToRoute('messenger_proposal_single_index', array('authToken' => '8u0QYy8OTLVKZK8', 'experiment_proposal_single_id' => $proposalSingle->getId()));
             }
 
-        /*} catch(\Exception $e) {
+        } catch(\Exception $e) {
             return $this->redirectToRoute('messenger_system_restart');
-        }*/
+        }
     }
 }

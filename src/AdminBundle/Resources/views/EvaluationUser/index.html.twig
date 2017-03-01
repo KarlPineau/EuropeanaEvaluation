@@ -63,8 +63,8 @@
                         <td>{{ user.context }}</td>
                         <td>{{ user.createDate|date('m-d-Y') }}</td>
                         <td>
-                            <a href="{{ path('admin_evaluation_user_view', {'user_id': user.id}) }}" class="btn btn-sm btn-primary"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                            <a href="{{ path('api_user_remove', {'user_id': user.id}) }}" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i></a>
+                            <a href="{{ path('admin_evaluation_user_view', {'user_id': user.id, 'authtoken': authtoken}) }}" class="btn btn-sm btn-primary" title="View details"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                            {% if authtoken == "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii" %}<a href="{{ path('api_user_remove', {'user_id': user.id, 'authtoken': authtoken}) }}" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i></a>{% endif %}
                         </td>
                     </tr>
                 {% else %}

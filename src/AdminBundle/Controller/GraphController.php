@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GraphController extends Controller
 {
-    public function indexAction()
+    public function indexAction($authtoken)
     {
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('EntityBundle:EntityProperty')->getAll();
@@ -20,11 +20,12 @@ class GraphController extends Controller
         }
 
         return $this->render('AdminBundle:Graph:index.html.twig', array(
+            'authtoken' => $authtoken,
             'objects' => $objects
         ));
     }
 
-    public function removeAction()
+    public function removeAction($authtoken)
     {
         $em = $this->getDoctrine()->getManager();
         foreach($em->getRepository('EntityBundle:EntityProperty')->findAll() as $entity) {
@@ -36,6 +37,6 @@ class GraphController extends Controller
         $em->flush();
 
         $this->get('session')->getFlashBag()->add('notice', 'The graph has been removing.' );
-        return $this->redirect($this->generateUrl('admin_home_index'));
+        return $this->redirect($this->generateUrl('admin_home_index', array('authtoken' => $authtoken)));
     }
 }

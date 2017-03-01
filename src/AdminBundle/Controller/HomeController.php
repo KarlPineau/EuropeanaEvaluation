@@ -7,8 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeController extends Controller
 {
-    public function indexAction()
+    public function indexAction($authtoken)
     {
-        return $this->render('AdminBundle:Home:index.html.twig');
+        return $this->render('AdminBundle:Home:index.html.twig', array('authtoken' => $authtoken));
     }
 }

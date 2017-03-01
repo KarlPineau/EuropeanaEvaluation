@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EvaluationUserController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction($authtoken, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $usersQuery = $em->getRepository('APIBundle:EvaluationUser')->findAll();
@@ -19,16 +19,18 @@ class EvaluationUserController extends Controller
         );
 
         return $this->render('AdminBundle:EvaluationUser:index.html.twig', array(
+            'authtoken' => $authtoken,
             'users' => $users
         ));
     }
 
-    public function viewAction($user_id)
+    public function viewAction($authtoken, $user_id)
     {
         $user = $this->get('api.user')->get($user_id);
         if($user === null) { throw $this->createNotFoundException('User '.$user_id.' undefined');}
 
         return $this->render('AdminBundle:EvaluationUser:view.html.twig', array(
+            'authtoken' => $authtoken,
             'user' => $user
         ));
     }

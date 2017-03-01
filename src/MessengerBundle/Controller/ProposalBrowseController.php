@@ -9,9 +9,9 @@ class ProposalBrowseController extends Controller
 {
     public function indexAction($experiment_proposal_browse_id)
     {
-        //try {
+        try {
             $proposalBrowse = $this->get('api.proposal_browse')->get($experiment_proposal_browse_id);
-            //if($proposalBrowse == null) {return $this->redirectToRoute('messenger_system_restart');}
+            if($proposalBrowse == null) {return $this->redirectToRoute('messenger_system_restart');}
 
             $referenceItem = (object) $this->get('entity.graph')->buildObject($proposalBrowse->getReferenceItem());
             $suggestedItems = array();
@@ -47,7 +47,6 @@ class ProposalBrowseController extends Controller
                     ]
                 ];
             }
-            shuffle($elements);
 
             $elements[] = [
                 "title" => "No interesting choices",
@@ -122,14 +121,14 @@ class ProposalBrowseController extends Controller
             $response = new Response(json_encode($messages));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
-        /*} catch(\Exception $e) {
+        } catch(\Exception $e) {
             return $this->redirectToRoute('messenger_system_restart');
-        }*/
+        }
     }
 
     public function validationAction($experiment_proposal_browse_id, $experiment_proposal_browse_i_id)
     {
-        //try {
+        try {
             $proposalBrowse = $this->get('api.proposal_browse')->get($experiment_proposal_browse_id);
             if($proposalBrowse == null) {return $this->redirectToRoute('messenger_system_restart');}
 
@@ -168,8 +167,8 @@ class ProposalBrowseController extends Controller
             $response = new Response(json_encode($messages));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
-        /*} catch(\Exception $e) {
+        } catch(\Exception $e) {
             return $this->redirectToRoute('messenger_system_restart');
-        }*/
+        }
     }
 }

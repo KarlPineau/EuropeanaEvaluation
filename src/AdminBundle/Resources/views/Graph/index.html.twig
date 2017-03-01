@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block h1_extend %}
-    <a class="btn btn-sm btn-danger" href="{{ path('admin_graph_remove') }}"><i class="fa fa-remove"></i> Remove graph (no way back!)</a>
+    {% if authtoken == "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii" %}<a class="btn btn-sm btn-danger" href="{{ path('admin_graph_remove', {'authtoken': authtoken}) }}"><i class="fa fa-remove"></i> Remove graph (no way back!)</a>{% endif %}
 {% endblock %}
     
 {% block content %}
@@ -28,6 +28,8 @@
                 </div>
                 <br />
             {% endfor %}
+
+            <div class="alert alert-info">{{ objects|length }} items in this graph</div>
 
             {% for object in objects %}
                 <div class="well" id="object-{{ messenger_stringify.id(object['europeana_id']) }}">
@@ -41,6 +43,7 @@
                                     <p>
                                         <a href="http://www.europeana.eu/portal/record{{ object['europeana_id'] }}.html" class="btn btn-default" target="_blank">View on Europeana</a>
                                         <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseObject-{{ messenger_stringify.id(object['europeana_id']) }}" aria-expanded="false" aria-controls="collapseObject-{{ messenger_stringify.id(object['europeana_id']) }}"><i class="fa fa-plus"></i></a>
+                                        <a class="btn btn-warning" href="#" title="Run Similar Items"><i class="fa fa-cog"></i></a>
                                     </p>
                                     <div class="collapse" id="collapseObject-{{ messenger_stringify.id(object['europeana_id']) }}">
                                         {% for property, value in object %}
