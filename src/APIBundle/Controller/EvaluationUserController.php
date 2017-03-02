@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EvaluationUserController extends Controller
 {
-    public function removeAction($user_id)
+    public function removeAction($user_id, $authtoken)
     {
         $user = $this->get('api.user')->get($user_id);
         if($user === null) { throw $this->createNotFoundException('User '.$user_id.' undefined.');}
@@ -26,6 +26,6 @@ class EvaluationUserController extends Controller
         $this->getDoctrine()->getManager()->flush();
 
         $this->get('session')->getFlashBag()->add('notice', 'User '.$user_id.' has been correctly removing.' );
-        return $this->redirectToRoute('admin_evaluation_user_index');
+        return $this->redirectToRoute('admin_evaluation_user_index', array('authtoken'=> $authtoken));
     }
 }

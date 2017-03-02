@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block h1_extend %}
+    <input type="text" class="form-control" value="http://europeana-evaluation.karl-pineau.fr/admin/7jCqTsRaGlUNwpe/graph" />
     {% if authtoken == "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii" %}<a class="btn btn-sm btn-danger" href="{{ path('admin_graph_remove', {'authtoken': authtoken}) }}"><i class="fa fa-remove"></i> Remove graph (no way back!)</a>{% endif %}
 {% endblock %}
     

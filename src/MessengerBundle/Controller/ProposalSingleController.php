@@ -60,7 +60,10 @@ class ProposalSingleController extends Controller
                         ]
                     ],
                     [
-                        "text" => "Please rate the value of this recommendation in your opinion:",
+                        "text" => "Based on this object (left), we suggest you the following one (right). Can you rate this recommendation between 1 and 5?"
+                    ],
+                    [
+                        "text" => "1 means that you do not think this is an interesting recommendation, 5 means that you think this is a very interesting recommendation.",
                         "quick_replies" => [
                             [
                                 "set_attributes" =>

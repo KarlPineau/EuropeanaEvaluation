@@ -19,6 +19,19 @@ class graph
         $this->stringify = $stringify;
     }
 
+    public function getObjects()
+    {
+        $ids = [];
+        foreach($this->em->getRepository('EntityBundle:EntityProperty')->findAll() as $property)
+        {
+            if(!array_search($property->getEuropeanaId(), $ids)) {
+                $ids[] = $property->getEuropeanaId();
+            }
+        }
+
+        return $ids;
+    }
+
     public function buildObject($europeana_id)
     {
         $object = array();
@@ -64,7 +77,7 @@ class graph
     {
         $level = ($level == null) ? 0 : $level;
 
-        $relation = $this->em->getRepository('EntityBundle:EntityRelation')->findOneBy(array('entity2' => $id), array('createDate', 'ASC'));
+        $relation = $this->em->getRepository('EntityBundle:EntityRelation')->findOneBy(array('entity2' => $id));
         if($relation == null) {
             return $level;
         } else {

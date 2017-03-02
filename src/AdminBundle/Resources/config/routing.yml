@@ -30,6 +30,12 @@ admin_entity_resetFetch:
     requirements:
         authtoken: "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"
 
+admin_entity_similarityProcess:
+    path:     /{authtoken}/entity/similarity/process
+    defaults: { _controller: AdminBundle:Entity:similarityProcess }
+    requirements:
+        authtoken: "JoaN4Qhzo2DemdQ4YDiLmK4QJjqmI294ii"
+
 # Graph
 admin_graph_index:
     path:     /{authtoken}/graph

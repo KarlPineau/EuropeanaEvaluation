@@ -90,4 +90,24 @@ class EntityController extends Controller
         $this->get('session')->getFlashBag()->add('notice', 'The fetch list has been resetting properly.' );
         return $this->redirect($this->generateUrl('admin_home_index', array('authtoken' => $authtoken,)));
     }
+
+    public function similarityProcessAction($authtoken)
+    {
+        set_time_limit(0);
+        $ids = $this->get('entity.graph')->getObjects();
+        foreach($ids as $europeana_id) {
+            $this->get('entity.similar_items')->computeSimilarity($this->get('entity.graph')->buildObject($europeana_id), 4);
+        }
+
+        $this->get('session')->getFlashBag()->add('notice', 'Similarity process run with success' );
+        return $this->redirect($this->generateUrl('admin_home_index', array('authtoken' => $authtoken)));
+    }
+
+    public function similarityProcessForEntityAction($europeana_id, $authtoken)
+    {
+        $this->get('entity.similar_items')->computeSimilarity($this->get('entity.graph')->buildObject($europeana_id), 4);
+
+        $this->get('session')->getFlashBag()->add('notice', 'Similarity process run with success' );
+        return $this->redirect($this->generateUrl('admin_home_index', array('authtoken' => $authtoken)));
+    }
 }

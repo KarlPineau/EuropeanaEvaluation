@@ -15,6 +15,7 @@
 {% endblock %}
 
 {% block h1_extend %}
+    <input type="text" class="form-control" value="http://europeana-evaluation.karl-pineau.fr/admin/7jCqTsRaGlUNwpe" />
 {% endblock %}
     
 {% block content %}
@@ -43,6 +44,7 @@
                     <li><a href="{{ path('admin_entity_insert', {'authtoken': authtoken}) }}">Insert Fetch</a></li>
                     <li><a href="{{ path('admin_entity_viewWaitingFetch', {'authtoken': authtoken}) }}">Waiting Fetch</a></li>
                     <li><a href="{{ path('admin_entity_resetFetch', {'authtoken': authtoken}) }}">Reset Fetch <span class="text-warning">DO NOT USE</span></a></li>
+                    <li><a href="{{ path('admin_entity_similarityProcess', {'authtoken': authtoken}) }}">Similarity Process</a></li>
                 </ul>
                 {% endif %}
             </div>

@@ -100,7 +100,7 @@ class ProposalBrowseController extends Controller
                         ]
                     ],
                     [
-                        "text" => "Please select the most similar items in your opinion",
+                        "text" => "You are now browsing this object. In your opinion, which item in the following list seems the most interesting to continue your browsing?",
                     ],
                     [
                         "attachment" => [

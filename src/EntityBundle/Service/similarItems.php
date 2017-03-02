@@ -32,19 +32,19 @@ class similarItems
 
         $record = (object) $record;
 
-        if($this->graph->getLevel($record->europeana_id, null) <= 4) {
-            $relations = $this->graph->getRelations($record->europeana_id);
+        //if($this->graph->getLevel($record->europeana_id, null) <= 4) {
+            /*$relations = $this->graph->getRelations($record->europeana_id);
             $algorithmsGenerated = array();
             foreach ($relations as $relation) {
                 $algorithmsGenerated = $relation['algorithm'];
-            }
+            }*/
 
             foreach ($this->getAlgoSI() as $algorithm) {
-                if (!array_search($algorithmsGenerated, $algorithmsGenerated)) {
+                //if (!array_search($algorithmsGenerated, $algorithmsGenerated)) {
                     $this->runProcess($record, $algorithm, $deepLevel);
-                }
+                //}
             }
-        }
+        //}
     }
 
     public function getAlgoSI()

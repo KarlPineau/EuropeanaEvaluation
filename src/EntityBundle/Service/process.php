@@ -4,6 +4,7 @@ namespace EntityBundle\Service;
 
 use APIBundle\Service\log;
 use Doctrine\ORM\EntityManager;
+use EntityBundle\Entity\EntityImage;
 use EntityBundle\Entity\EntityProperty;
 
 class process
@@ -217,6 +218,7 @@ class process
 
     public function downloadThumbnail($record)
     {
+        $record = (array) $record;
         $this->log->log("------------------------------------------------------------------", 'entity');
         $this->log->log("-> entity.process->downloadThumbnail() -- ".date('Y/m/d h:i:s a', time()), 'entity');
         $this->log->log("Record: ".$record['europeana_id'], 'entity');
@@ -225,40 +227,19 @@ class process
         $thumbnail = $this->graph->getThumbnail($record);
         $this->log->log("Set thumbnail as: ".$thumbnail, 'entity');
 
-        $this->log->log("Start File download", 'entity');
-        $id = uniqid();
-        $ch = curl_init($thumbnail);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $data = curl_exec($ch);
-        curl_close($ch);
-        $this->log->log("Start File Put Contents", 'entity');
-        @file_put_contents('../media/thumbnails/'.$id.'.'.pathinfo($thumbnail)['extension'], $data);
-        $this->log->log("End File download as: ".'/media/thumbnails/'.$id.'.'.pathinfo($thumbnail)['extension'], 'entity');
+        $image = new EntityImage();
+        $file = file_get_contents($thumbnail);
+        $image->setFile($file);
+        $filename = $image->upload($file);
 
-
-        $this->log->log("Start File download", 'entity');
-        $id = uniqid();
-        $ch = curl_init ($thumbnail);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
-        $raw=curl_exec($ch);
-        curl_close ($ch);
-        $this->log->log("Start File Put Contents", 'entity');
-        if(file_exists('./web/media/thumbnails/')){
-            unlink('./web/media/thumbnails/');
+        if($filename != null) {
+            $entityProperty = new EntityProperty();
+            $entityProperty->setEuropeanaId($record['europeana_id']);
+            $entityProperty->setProperty('ee_thumbnail');
+            $entityProperty->setValue($filename);
+            //Maybe persist your entity if you need it
+            $this->em->persist($image);
+            $this->em->flush();
         }
-        $fp = fopen('./web/media/thumbnails/','x');
-        fwrite($fp, $raw);
-        fclose($fp);
-
-        $this->log->log("Start Register EntityProperty", 'entity');
-        $entityProperty = new EntityProperty();
-        $entityProperty->setEuropeanaId($record['europeana_id']);
-        $entityProperty->setProperty('thumbnail');
-        $entityProperty->setValue($id.'.'.pathinfo($thumbnail)['extension']);
-        $this->em->persist($entityProperty);
-        $this->em->flush();
-        $this->log->log("End Register EntityProperty", 'entity');
     }
 }
